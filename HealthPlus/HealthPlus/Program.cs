@@ -14,9 +14,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 
-// TẠM THỜI: host không ghi được log nên bọc toàn bộ khởi động để hiện lỗi ra response — gỡ sau khi deploy ổn
-try
-{
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseSerilog((ctx, lc) => lc.ReadFrom.Configuration(ctx.Configuration));
@@ -410,17 +407,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-}
-catch (Exception ex) when (ex is not HostAbortedException)
-{
-    // Không đọc appsettings.Production.json, phòng khi chính file đó gây lỗi
-    var diag = WebApplication.CreateBuilder(new WebApplicationOptions { Args = args, EnvironmentName = "StartupDiagnostics" });
-    var diagApp = diag.Build();
-    diagApp.Run(async ctx =>
-    {
-        ctx.Response.StatusCode = 500;
-        ctx.Response.ContentType = "text/plain; charset=utf-8";
-        await ctx.Response.WriteAsync("STARTUP ERROR\n" + ex);
-    });
-    diagApp.Run();
-}
