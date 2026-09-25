@@ -13,8 +13,10 @@
        $(OS)=Unix, RID này sẽ không áp dụng và publish ra framework-dependent bình thường.
        $(SkipWinX64Rid) là cửa thoát tạm thời cho `dotnet ef` — công cụ này không tự tìm đúng
        thư mục output khi có RuntimeIdentifier (build ra bin/.../win-x64/ nhưng ef tooling lại tìm
-       ở bin/.../ không có win-x64/), set biến môi trường SkipWinX64Rid=true trước khi chạy migration. -->
-  <PropertyGroup Condition="'$(OS)' == 'Windows_NT' AND '$(SkipWinX64Rid)' != 'true'">
+       ở bin/.../ không có win-x64/), set biến môi trường SkipWinX64Rid=true trước khi chạy migration.
+       Chỉ ép khi máy build là ARM64: máy build của hosting là Windows x64 và chạy app ở tiến trình
+       32-bit, nếu ép win-x64 thì app không nạp được (lỗi 500.30, không kịp ghi log dòng nào). -->
+  <PropertyGroup Condition="'$(OS)' == 'Windows_NT' AND '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'Arm64' AND '$(SkipWinX64Rid)' != 'true'">
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <SelfContained>false</SelfContained>
   </PropertyGroup>
