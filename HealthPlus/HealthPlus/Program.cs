@@ -348,6 +348,10 @@ using (var scope = app.Services.CreateScope())
     // — dùng cho tính năng "tư vấn bác sĩ online trả phí". Chạy độc lập, tự kiểm tra qua bảng Hospitals.
     if (await uow.Hospitals.CountAsync() == 0)
     {
+        // DB trống thì 2 khối seed trên vừa chạy cùng lượt và EF còn track các User vừa tạo —
+        // repository đọc AsNoTracking ra instance mới, Update() sẽ báo trùng Id nếu không clear trước
+        db.ChangeTracker.Clear();
+
         var thanhDo = new Hospital { Id = Guid.NewGuid(), Name = "Bệnh viện Đa khoa Quốc tế Thành Đô", Address = "12 Đường Sức Khỏe, Quận 1, TP.HCM" };
         var hongPhuc = new Hospital { Id = Guid.NewGuid(), Name = "Bệnh viện Đa khoa Hồng Phúc", Address = "45 Đường Hòa Bình, Quận 3, TP.HCM" };
         var vietTam = new Hospital { Id = Guid.NewGuid(), Name = "Bệnh viện Đa khoa Việt Tâm", Address = "78 Đường Nguyễn Trãi, Quận 5, TP.HCM" };
