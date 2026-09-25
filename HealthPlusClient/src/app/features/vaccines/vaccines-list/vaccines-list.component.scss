@@ -1,0 +1,124 @@
+.page { max-width: 1100px; margin: 0 auto; }
+.page-header {
+  display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px;
+}
+.page-title   { font-size: 22px; font-weight: 700; color: var(--hp-text-primary); margin: 0 0 4px; }
+.page-subtitle{ color: var(--hp-text-secondary); font-size: 14px; margin: 0; }
+.loading-center { display: flex; justify-content: center; padding: 80px 0; }
+
+/* Overdue banner */
+.overdue-banner {
+  display: flex; align-items: flex-start; gap: 12px;
+  background: #FFEBEE; border: 1px solid #FFCDD2;
+  border-radius: var(--hp-radius-sm); padding: 14px 16px;
+  margin-bottom: 20px;
+  > mat-icon { color: #C62828; flex-shrink: 0; margin-top: 2px; }
+}
+.overdue-content { flex: 1; }
+.overdue-content strong { color: #C62828; font-size: 14px; }
+.overdue-names { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.overdue-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px; background: white; border: 1px solid #FFCDD2;
+  border-radius: 20px; font-size: 12px; color: #C62828; cursor: pointer;
+  &:hover { background: #FFCDD2; }
+}
+.overdue-days { font-size: 11px; opacity: 0.7; }
+
+/* Filter */
+.filter-bar { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+.filter-field { min-width: 260px; }
+.status-tabs { display: flex; gap: 4px; }
+.status-tab {
+  padding: 6px 14px; border-radius: 20px; border: 1px solid var(--hp-border);
+  background: white; cursor: pointer; font-size: 13px; color: var(--hp-text-secondary);
+  display: flex; align-items: center; gap: 6px;
+  transition: all 0.2s;
+  &:hover { background: var(--hp-primary-light); }
+  &.active { background: var(--hp-primary); color: white; border-color: var(--hp-primary); }
+}
+.tab-count {
+  padding: 1px 6px; border-radius: 10px; font-size: 11px; font-weight: 700;
+  &.Completed  { background: #BBDEFB; color: #0D47A1; }
+  &.Scheduled  { background: #E3F2FD; color: #1565C0; }
+  &.Overdue    { background: #FFEBEE; color: #C62828; }
+}
+.active .tab-count { background: rgba(255,255,255,0.25); color: white; }
+
+/* Empty */
+.empty-state {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 80px 24px; text-align: center;
+  mat-icon { font-size: 64px; width: 64px; height: 64px; color: var(--hp-border); margin-bottom: 16px; }
+  h3 { font-size: 18px; font-weight: 600; color: var(--hp-text-primary); margin: 0 0 8px; }
+  p  { color: var(--hp-text-secondary); margin: 0 0 24px; }
+}
+
+/* Grid */
+.vaccine-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px;
+}
+.vaccine-card {
+  border-radius: var(--hp-radius) !important;
+  box-shadow: var(--hp-shadow) !important;
+  padding: 0 !important; overflow: hidden;
+  transition: box-shadow 0.2s, transform 0.2s;
+  &:hover { box-shadow: var(--hp-shadow-hover) !important; transform: translateY(-2px); }
+}
+.status-bar {
+  height: 4px;
+  &.completed  { background: #0D47A1; }
+  &.scheduled  { background: #1976D2; }
+  &.overdue    { background: #C62828; }
+}
+.card-body { padding: 16px; }
+
+.card-top { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; }
+.vaccine-icon {
+  width: 40px; height: 40px; border-radius: 12px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  &.completed  { background: #BBDEFB; mat-icon { color: #0D47A1; } }
+  &.scheduled  { background: #E3F2FD; mat-icon { color: #1976D2; } }
+  &.overdue    { background: #FFEBEE; mat-icon { color: #C62828; } }
+}
+.vaccine-name-block { flex: 1; }
+.vaccine-name { font-size: 14px; font-weight: 700; color: var(--hp-text-primary); display: block; }
+.dose-label   { font-size: 12px; color: var(--hp-text-secondary); }
+
+.status-chip {
+  padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600;
+  flex-shrink: 0;
+  &.completed  { background: #BBDEFB; color: #0D47A1; }
+  &.scheduled  { background: #E3F2FD; color: #1565C0; }
+  &.overdue    { background: #FFEBEE; color: #C62828; }
+}
+
+.info-rows { display: flex; flex-direction: column; gap: 5px; }
+.info-row {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--hp-text-secondary);
+  mat-icon { font-size: 14px; width: 14px; height: 14px; flex-shrink: 0; }
+  b { color: var(--hp-text-primary); }
+}
+.info-row.overdue-row { color: #C62828; mat-icon { color: #C62828; } b { color: #C62828; } }
+.info-row.side-effects { color: #AD1457; mat-icon { color: #AD1457; } }
+
+.overdue-tag {
+  margin-left: auto; padding: 1px 6px; background: #FFEBEE;
+  color: #C62828; border-radius: 10px; font-size: 10px; font-weight: 700; white-space: nowrap;
+}
+.soon-tag {
+  margin-left: auto; padding: 1px 6px; background: #FCE4EC;
+  color: #AD1457; border-radius: 10px; font-size: 10px; font-weight: 600; white-space: nowrap;
+}
+
+.card-actions {
+  display: flex; justify-content: flex-end; margin-top: 12px;
+  border-top: 1px solid var(--hp-border); padding-top: 8px;
+}
+.del-btn { color: #BDBDBD !important; &:hover { color: var(--hp-danger) !important; } }
+
+.pagination-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 0; color: var(--hp-text-secondary); font-size: 13px;
+}

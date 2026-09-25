@@ -1,0 +1,17 @@
+<app-info-page-layout
+  title="Câu hỏi thường gặp"
+  subtitle="Giải đáp nhanh những thắc mắc phổ biến về Health+"
+  icon="help">
+  <p>Chưa tìm thấy câu trả lời? <a routerLink="/lien-he">Liên hệ với chúng tôi</a>.</p>
+
+  <mat-accordion class="faq-list">
+    @for (item of items; track item.q) {
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>{{ item.q }}</mat-panel-title>
+        </mat-expansion-panel-header>
+        <p>{{ item.a }}</p>
+      </mat-expansion-panel>
+    }
+  </mat-accordion>
+</app-info-page-layout>

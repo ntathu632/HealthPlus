@@ -1,0 +1,6 @@
+@HealthPlus.Infrastructure_HostAddress = http://localhost:5012
+
+GET {{HealthPlus.Infrastructure_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

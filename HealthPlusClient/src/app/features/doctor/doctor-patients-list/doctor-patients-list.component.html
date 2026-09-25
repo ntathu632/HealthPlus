@@ -1,0 +1,57 @@
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h2 class="page-title">Bệnh nhân của tôi</h2>
+      <p class="page-subtitle">Danh sách bệnh nhân được phân công cho bạn</p>
+    </div>
+  </div>
+
+  @if (!loading() && patients().length > 0) {
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Tìm theo tên hoặc email</mat-label>
+      <input matInput [(ngModel)]="search" />
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+  }
+
+  @if (loading()) {
+    <div class="loading-center"><mat-spinner diameter="48" /></div>
+  }
+
+  @if (!loading() && patients().length === 0) {
+    <div class="empty-state">
+      <mat-icon>groups</mat-icon>
+      <h3>Chưa có bệnh nhân nào</h3>
+      <p>Quản trị viên chưa gán bệnh nhân nào cho bạn</p>
+    </div>
+  }
+
+  @if (!loading() && patients().length > 0 && filteredPatients().length === 0) {
+    <div class="empty-state">
+      <mat-icon>search_off</mat-icon>
+      <h3>Không tìm thấy bệnh nhân nào khớp</h3>
+    </div>
+  }
+
+  @if (!loading() && filteredPatients().length > 0) {
+    <div class="patients-grid">
+      @for (p of filteredPatients(); track p.id) {
+        <mat-card class="patient-card" [routerLink]="[p.id]">
+          <div class="avatar">
+            @if (p.avatarUrl) {
+              <img [src]="p.avatarUrl" alt="" />
+            } @else {
+              {{ initials(p.fullName) }}
+            }
+          </div>
+          <div class="info">
+            <span class="name">{{ p.fullName }}</span>
+            <span class="email">{{ p.email }}</span>
+            @if (p.phoneNumber) { <span class="phone">{{ p.phoneNumber }}</span> }
+          </div>
+          <span class="assigned-since">Từ {{ p.assignedAt | date:'dd/MM/yyyy' }}</span>
+        </mat-card>
+      }
+    </div>
+  }
+</div>

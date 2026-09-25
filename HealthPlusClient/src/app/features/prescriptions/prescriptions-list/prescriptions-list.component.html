@@ -1,0 +1,111 @@
+<div class="page">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h2 class="page-title">Đơn thuốc</h2>
+      <p class="page-subtitle">Quản lý và theo dõi đơn thuốc của bạn</p>
+    </div>
+    <button mat-raised-button color="primary" (click)="createNew()">
+      <mat-icon>add</mat-icon> Tạo đơn thuốc
+    </button>
+  </div>
+
+  <!-- Status tabs -->
+  <div class="status-tabs">
+    @for (tab of statusTabs; track tab.value) {
+      <button class="status-tab"
+        [class.active]="selectedStatus() === tab.value"
+        (click)="selectedStatus.set(tab.value)">
+        {{ tab.label }}
+        @if (countByStatus(tab.value) > 0) {
+          <span class="tab-count" [ngClass]="tab.value.toLowerCase()">
+            {{ countByStatus(tab.value) }}
+          </span>
+        }
+      </button>
+    }
+  </div>
+
+  @if (loading()) {
+    <div class="loading-center"><mat-spinner diameter="48" /></div>
+  }
+
+  @if (!loading() && filteredItems().length === 0) {
+    <div class="empty-state">
+      <mat-icon>receipt_long</mat-icon>
+      <h3>Chưa có đơn thuốc nào</h3>
+      <p>Tạo đơn thuốc mới và thêm danh sách thuốc hoặc tải ảnh đơn thuốc</p>
+      <button mat-raised-button color="primary" (click)="createNew()">
+        <mat-icon>add</mat-icon> Tạo đơn đầu tiên
+      </button>
+    </div>
+  }
+
+  @if (!loading() && filteredItems().length > 0) {
+    <div class="rx-grid">
+      @for (rx of filteredItems(); track rx.id) {
+        <mat-card class="rx-card" (click)="openDetail(rx)">
+          <div class="status-bar" [ngClass]="rx.status.toLowerCase()"></div>
+          <div class="card-body">
+
+            <!-- Top row -->
+            <div class="card-top">
+              <div class="rx-icon" [ngClass]="rx.status.toLowerCase()">
+                <mat-icon>{{ rx.imageUrl ? 'image' : 'receipt_long' }}</mat-icon>
+              </div>
+              <div class="rx-main">
+                <span class="rx-date">{{ rx.createdAt | date:'dd/MM/yyyy' }}</span>
+                <span class="rx-count">{{ rx.items.length }} thuốc</span>
+              </div>
+              <span class="status-chip" [ngClass]="rx.status.toLowerCase()">
+                {{ statusLabel(rx.status) }}
+              </span>
+            </div>
+
+            <!-- Items preview -->
+            @if (rx.items.length > 0) {
+              <div class="items-preview">
+                @for (item of rx.items.slice(0, 3); track item.id) {
+                  <div class="preview-item">
+                    <mat-icon>fiber_manual_record</mat-icon>
+                    <span class="med-name">{{ item.medicineName }}</span>
+                    @if (item.dosage) { <span class="med-dose">{{ item.dosage }}</span> }
+                    @if (item.isConfirmed) { <mat-icon class="confirmed-icon">check_circle</mat-icon> }
+                  </div>
+                }
+                @if (rx.items.length > 3) {
+                  <span class="more-items">+{{ rx.items.length - 3 }} thuốc khác</span>
+                }
+              </div>
+            }
+
+            @if (rx.items.length === 0 && !rx.imageUrl) {
+              <p class="no-items-hint">Nhấn để thêm thuốc hoặc tải ảnh đơn</p>
+            }
+
+            <!-- OCR confidence -->
+            @if (rx.ocrConfidenceScore != null) {
+              <div class="ocr-info">
+                <mat-icon>psychology</mat-icon>
+                OCR {{ (rx.ocrConfidenceScore * 100).toFixed(0) }}% chính xác
+              </div>
+            }
+
+            <!-- Actions -->
+            <div class="card-actions" (click)="$event.stopPropagation()">
+              <button mat-icon-button matTooltip="Xem chi tiết" (click)="openDetail(rx)">
+                <mat-icon>open_in_new</mat-icon>
+              </button>
+              <button mat-icon-button matTooltip="Xoá đơn thuốc" class="del-btn" (click)="delete(rx)">
+                <mat-icon>delete_outline</mat-icon>
+              </button>
+            </div>
+
+          </div>
+        </mat-card>
+      }
+    </div>
+  }
+
+</div>

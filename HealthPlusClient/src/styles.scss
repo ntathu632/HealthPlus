@@ -1,0 +1,230 @@
+@use '@angular/material' as mat;
+
+// Tự host font Material Icons (thay vì load qua Google Fonts CDN trong index.html) — máy dev ARM64
+// chạy trong Parallels đôi khi không tải được font từ CDN (mạng chậm/hạn chế), khiến <mat-icon> hiện
+// chữ thô ("add", "close"...) thay vì icon thật. Tự host đảm bảo icon luôn hiển thị đúng, không phụ
+// thuộc mạng ngoài lúc chạy app.
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/fonts/material-icons.woff2') format('woff2');
+}
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
+
+$hp-primary: (
+  0: #000000, 10: #001A41, 20: #002C6B, 25: #003580,
+  30: #003F96, 35: #0049AC, 40: #1565C0, 50: #1976D2,
+  60: #42A5F5, 70: #64B5F6, 80: #90CAF9, 90: #BBDEFB,
+  95: #E3F2FD, 98: #F0F7FF, 99: #F8FBFF, 100: #FFFFFF,
+);
+$hp-error: (
+  0: #000000, 10: #410002, 20: #690005, 25: #7E0007,
+  30: #93000A, 35: #A80710, 40: #BA1A1A, 50: #DE3730,
+  60: #FF5449, 70: #FF897D, 80: #FFB4AB, 90: #FFDAD6,
+  95: #FFEDEA, 98: #FFF8F7, 99: #FFFBFF, 100: #FFFFFF,
+);
+
+html {
+  height: 100%;
+  @include mat.theme((
+    color: (primary: $hp-primary, secondary: $hp-primary, tertiary: $hp-primary, error: $hp-error),
+    typography: Roboto,
+    density: 0,
+  ));
+
+  // `mat.theme()` ở trên chỉ tính đúng các token bắt nguồn từ primary/tertiary — vì không truyền
+  // palette "neutral" nên các token surface/background/outline/secondary/error/... bị Angular Material
+  // sinh ra rỗng (`light-dark(, )`), khiến background-color của mat-card/mat-dialog/mat-menu/mat-select-panel
+  // v.v. bị coi là invalid và fallback về transparent — nhìn như "chìm" vào màu nền trang thay vì màu trắng.
+  // Ép lại thủ công các token hay dùng nhất để mọi khung/form của Material đều có nền trắng rõ ràng.
+  --mat-sys-surface: #FFFFFF;
+  --mat-sys-surface-container: #FFFFFF;
+  --mat-sys-surface-container-low: #FFFFFF;
+  --mat-sys-surface-container-lowest: #FFFFFF;
+  --mat-sys-surface-container-high: #F8FAFC;
+  --mat-sys-surface-container-highest: #F1F5F9;
+  --mat-sys-surface-bright: #FFFFFF;
+  --mat-sys-surface-dim: #F8FAFC;
+  --mat-sys-surface-variant: #F8FAFC;
+  --mat-sys-background: #F0F4F8;
+  --mat-sys-on-surface: #0F172A;
+  --mat-sys-on-surface-variant: #64748B;
+  --mat-sys-on-background: #0F172A;
+  --mat-sys-outline: #E2E8F0;
+  --mat-sys-outline-variant: #F1F5F9;
+  --mat-sys-primary: #1976D2;
+  --mat-sys-secondary: #1565C0;
+  --mat-sys-secondary-container: #E3F2FD;
+  --mat-sys-on-secondary: #FFFFFF;
+  --mat-sys-on-secondary-container: #0D47A1;
+  --mat-sys-secondary-fixed: #E3F2FD;
+  --mat-sys-secondary-fixed-dim: #BBDEFB;
+  --mat-sys-on-secondary-fixed-variant: #0D47A1;
+  --mat-sys-error: #D32F2F;
+  --mat-sys-error-container: #FFEBEE;
+  --mat-sys-on-error: #FFFFFF;
+  --mat-sys-on-error-container: #B71C1C;
+  --mat-sys-inverse-surface: #0F172A;
+  --mat-sys-inverse-on-surface: #FFFFFF;
+  --mat-sys-scrim: #000000;
+  --mat-sys-shadow: #000000;
+}
+
+body {
+  color-scheme: light;
+  background: #F0F4F8;
+  color: #0F172A;
+  font-family: 'Inter', 'Roboto', sans-serif;
+  margin: 0; height: 100%;
+  -webkit-font-smoothing: antialiased;
+}
+
+// Form controls (button/input/select/textarea) không tự kế thừa font-family/font-size từ trang
+// theo mặc định của trình duyệt — khiến các <button> thường (không dùng mat-button) như
+// .status-tab, .social-btn... hiển thị sai font hệ thống, làm text/chiều cao lệch nhau khi đặt
+// cạnh nhau trong 1 hàng dù CSS canh hàng (flex) đã đúng.
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+// ── Bảng màu: Trắng chủ đạo · Xanh · Đỏ ─────────────────────────────────────
+:root {
+  // Blues
+  --blue-900: #0D47A1;
+  --blue-800: #1565C0;
+  --blue-700: #1976D2;
+  --blue-600: #1E88E5;
+  --blue-500: #2196F3;
+  --blue-200: #90CAF9;
+  --blue-100: #BBDEFB;
+  --blue-50:  #E3F2FD;
+  --blue-25:  #F0F7FF;
+
+  // Reds
+  --red-900: #B71C1C;
+  --red-800: #C62828;
+  --red-700: #D32F2F;
+  --red-600: #E53935;
+  --red-100: #FFCDD2;
+  --red-50:  #FFEBEE;
+  --red-25:  #FFF5F5;
+
+  // Neutrals
+  --gray-900: #0F172A;
+  --gray-700: #334155;
+  --gray-500: #64748B;
+  --gray-400: #94A3B8;
+  --gray-200: #E2E8F0;
+  --gray-100: #F1F5F9;
+  --gray-50:  #F8FAFC;
+  --white:    #FFFFFF;
+
+  // Semantic aliases
+  --hp-primary:        var(--blue-700);
+  --hp-primary-dark:   var(--blue-900);
+  --hp-primary-light:  var(--blue-50);
+  --hp-red:            var(--red-700);
+  --hp-red-light:      var(--red-50);
+  --hp-bg:             #F0F4F8;
+  --hp-surface:        var(--white);
+  --hp-border:         var(--gray-200);
+  --hp-text-primary:   var(--gray-900);
+  --hp-text-secondary: var(--gray-500);
+  --hp-danger:         var(--red-700);
+  --hp-success:        var(--blue-700);
+  --hp-warning:        var(--red-600);
+  --hp-card-bg:        var(--white);
+
+  --hp-shadow-sm:  0 1px 2px rgba(15,23,42,0.06);
+  --hp-shadow:     0 4px 12px rgba(15,23,42,0.08);
+  --hp-shadow-md:  0 8px 24px rgba(15,23,42,0.10);
+
+  --hp-radius-sm:  8px;
+  --hp-radius:     12px;
+  --hp-radius-lg:  16px;
+
+  --hp-sidebar-width: 248px;
+  --hp-header-height: 60px;
+}
+
+// ── Scrollbar ─────────────────────────────────────────────────────────────────
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--gray-200); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gray-400); }
+
+// ── Material overrides ────────────────────────────────────────────────────────
+.mat-drawer, .mat-sidenav { border-radius: 0 !important; }
+.mat-mdc-card {
+  background-color: var(--hp-card-bg) !important;
+  border-radius: var(--hp-radius-lg) !important;
+  box-shadow: var(--hp-shadow-sm) !important;
+  border: 1px solid var(--hp-border) !important;
+}
+.mat-mdc-dialog-surface,
+.mdc-dialog__surface {
+  background-color: var(--hp-card-bg) !important;
+}
+.mat-mdc-menu-panel,
+.mat-mdc-select-panel {
+  background-color: var(--hp-card-bg) !important;
+}
+// Angular Material không tự có rule ".mat-mdc-raised-button.mat-primary" nữa (kiến trúc M3 mới) —
+// nút "elevated" mặc định vẫn tô chữ màu `--mat-sys-primary` (xanh dương) trên nền trắng. Rule dưới
+// ép nền thành xanh đậm cho nút chính (primary) nhưng THIẾU đổi màu chữ, nên chữ xanh dương lại nằm
+// trên nền xanh đậm — không đọc được. Bổ sung màu chữ trắng để khớp với nền.
+.mat-mdc-raised-button.mat-primary {
+  background-color: var(--blue-700) !important;
+  color: #FFFFFF !important;
+}
+.mat-mdc-form-field { width: 100%; }
+.mdc-text-field--filled:not(.mdc-text-field--disabled) { background-color: var(--gray-50) !important; }
+
+// Input/select kiểu "outline" (dùng cho toàn bộ ô tìm kiếm/lọc trong app) tự thân trong suốt theo
+// thiết kế của Material — nếu đặt trực tiếp trên nền trang (`--hp-bg`, hơi xám-xanh) sẽ nhìn như
+// bị "chìm" màu xám. Ép nền trắng rõ ràng + viền dễ nhìn hơn cho toàn bộ input/select dạng outline.
+.mdc-text-field--outlined {
+  background-color: var(--hp-card-bg) !important;
+  border-radius: var(--hp-radius-sm) !important;
+}
+.mdc-notched-outline__leading,
+.mdc-notched-outline__notch,
+.mdc-notched-outline__trailing {
+  border-color: var(--hp-border) !important;
+}
+.mdc-text-field--outlined:not(.mdc-text-field--disabled):hover .mdc-notched-outline__leading,
+.mdc-text-field--outlined:not(.mdc-text-field--disabled):hover .mdc-notched-outline__notch,
+.mdc-text-field--outlined:not(.mdc-text-field--disabled):hover .mdc-notched-outline__trailing {
+  border-color: var(--gray-400) !important;
+}
+
+// ── Snackbar ──────────────────────────────────────────────────────────────────
+.snack-success .mdc-snackbar__surface { background: var(--blue-900) !important; }
+.snack-error   .mdc-snackbar__surface { background: var(--red-800)  !important; }
+
+// ── Badges ────────────────────────────────────────────────────────────────────
+.hp-badge {
+  display: inline-flex; align-items: center;
+  padding: 2px 10px; border-radius: 20px;
+  font-size: 11px; font-weight: 600;
+  &.info    { background: var(--blue-50);  color: var(--blue-800); }
+  &.danger  { background: var(--red-50);   color: var(--red-700);  }
+  &.warning { background: var(--red-25);   color: var(--red-600);  }
+  &.success { background: var(--blue-25);  color: var(--blue-700); }
+}

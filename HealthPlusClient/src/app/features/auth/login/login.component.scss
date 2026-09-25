@@ -1,0 +1,196 @@
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  background: #FFFFFF;
+}
+
+/* ── Left brand panel (giống hiệu ứng hero ở trang chủ) ── */
+.brand-panel {
+  width: 460px;
+  flex-shrink: 0;
+  background: linear-gradient(160deg, #DCEBFC 0%, #FFFFFF 55%, #FCEAEA 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 40px;
+  position: relative;
+  overflow: hidden;
+}
+.blob {
+  position: absolute; border-radius: 50%; opacity: 0.5;
+  animation: float 7s ease-in-out infinite;
+}
+.brand-content {
+  position: relative; z-index: 2;
+  display: flex; flex-direction: column; align-items: center;
+  animation: fade-up 0.7s ease both;
+}
+
+.brand-logo-link {
+  display: flex; flex-direction: column; align-items: center;
+  text-decoration: none; cursor: pointer;
+}
+.brand-logo {
+  position: relative;
+  width: 76px; height: 76px;
+  margin-bottom: 20px;
+}
+.logo-cross {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.cross-h, .cross-v {
+  position: absolute;
+  background: #D32F2F;
+  border-radius: 4px;
+}
+.cross-h { width: 60px; height: 19px; }
+.cross-v { width: 19px; height: 60px; }
+.heart-icon {
+  position: absolute;
+  bottom: -4px; right: -4px;
+  font-size: 26px; width: 26px; height: 26px;
+  color: #1565C0;
+}
+
+.brand-name {
+  font-size: 36px; font-weight: 800;
+  color: var(--hp-text-primary); margin: 0 0 8px;
+  letter-spacing: -1px;
+}
+.brand-plus { color: var(--hp-primary); }
+
+.brand-tagline {
+  font-size: 14.5px; color: var(--hp-text-secondary);
+  text-align: center; margin: 0 0 28px;
+  line-height: 1.6;
+}
+
+/* ── Mock dashboard card (y hệt hiệu ứng ở trang chủ) ── */
+.photo-visual {
+  position: relative; width: 220px; margin-bottom: 24px;
+}
+.mock-card {
+  position: relative; z-index: 2; width: 100%; background: white;
+  border-radius: 24px; box-shadow: var(--hp-shadow-md); border: 1px solid var(--hp-border);
+  padding: 20px; animation: float 6s ease-in-out infinite;
+}
+.mock-header { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+.mock-avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #0D47A1, #1565C0); flex-shrink: 0; }
+.mock-lines { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+.mock-line { height: 8px; border-radius: 4px; background: var(--gray-100); }
+.mock-stats { display: flex; gap: 10px; margin-bottom: 14px; }
+.mock-stat {
+  flex: 1; background: linear-gradient(135deg, #E3F2FD, #BBDEFB); border-radius: 12px; padding: 9px 10px;
+  display: flex; flex-direction: column;
+}
+.mock-stat-value { font-size: 16px; font-weight: 800; color: var(--hp-primary); }
+.mock-stat-label { font-size: 9px; color: var(--hp-text-secondary); }
+.mock-wave { width: 100%; height: 38px; margin-bottom: 12px; }
+.mock-row { height: 9px; border-radius: 5px; background: var(--gray-100); margin-bottom: 7px; }
+.float-badge {
+  position: absolute; z-index: 3; width: 44px; height: 44px; border-radius: 14px;
+  background: white; box-shadow: var(--hp-shadow-md); border: 1px solid var(--hp-border);
+  display: flex; align-items: center; justify-content: center;
+  animation: float 5s ease-in-out infinite;
+  mat-icon { color: var(--hp-primary); font-size: 21px; width: 21px; height: 21px; }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: none; }
+}
+
+.brand-chips { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--hp-text-secondary); background: white;
+  border: 1px solid var(--hp-border); padding: 5px 11px; border-radius: 20px;
+  mat-icon { font-size: 14px; width: 14px; height: 14px; color: var(--hp-primary); }
+}
+
+/* ── Right form panel ── */
+.form-panel {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #FAFAFA;
+  padding: 40px 24px;
+}
+
+.form-box {
+  width: 100%;
+  max-width: 400px;
+  background: white;
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+}
+
+.back-home-link {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 13px; color: #757575; text-decoration: none; margin-bottom: 20px;
+  mat-icon { font-size: 17px; width: 17px; height: 17px; }
+  &:hover { color: #1565C0; }
+}
+
+.form-header {
+  margin-bottom: 28px;
+  h2 { font-size: 26px; font-weight: 700; color: #212121; margin: 0 0 4px; }
+  p  { font-size: 14px; color: #616161; margin: 0; }
+}
+
+.auth-form {
+  display: flex; flex-direction: column; gap: 4px;
+}
+
+.error-alert {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 14px; background: #FFEBEE; color: #C62828;
+  border-radius: 8px; font-size: 14px;
+  mat-icon { font-size: 18px; width: 18px; height: 18px; }
+}
+
+.submit-btn {
+  height: 48px; font-size: 16px; font-weight: 600;
+  border-radius: 10px !important; margin-top: 8px;
+  background-color: #1565C0 !important;
+  color: white !important;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.social-divider {
+  display: flex; align-items: center; text-align: center;
+  color: #9E9E9E; font-size: 12.5px; margin: 20px 0;
+  &::before, &::after { content: ''; flex: 1; height: 1px; background: #E0E0E0; }
+  span { padding: 0 12px; }
+}
+.social-row { display: flex; gap: 12px; justify-content: center; }
+.social-btn {
+  width: 46px; height: 46px; border-radius: 12px; border: 1px solid #E0E0E0;
+  background: white; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: box-shadow 0.2s, transform 0.2s;
+  &:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
+}
+
+/* Nút Google Identity tự vẽ giao diện riêng — bỏ khung/nền của .social-btn để không bị viền đôi */
+.google-btn-slot { border: none; background: transparent; &:hover { box-shadow: none; transform: none; } }
+
+.auth-link {
+  text-align: center; color: #616161; font-size: 14px; margin: 20px 0 0;
+  a { color: #1565C0; font-weight: 600; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+}
+
+/* Mobile: stack vertically */
+@media (max-width: 768px) {
+  .auth-page { flex-direction: column; }
+  .brand-panel { width: 100%; padding: 32px 24px; }
+  .form-panel { background: white; }
+  .form-box { box-shadow: none; padding: 24px 0; }
+}

@@ -1,0 +1,56 @@
+<div class="page">
+  <div class="page-header">
+    <h2 class="page-title">Trò chuyện với AI về sức khỏe</h2>
+    <p class="page-subtitle">Hỏi đáp nhanh về triệu chứng, dinh dưỡng và thói quen sống lành mạnh</p>
+  </div>
+
+  <div class="disclaimer">
+    <mat-icon>info</mat-icon>
+    <span>Thông tin AI cung cấp chỉ mang tính tham khảo, <strong>không thay thế</strong> chẩn đoán hay tư vấn của bác sĩ. Nếu triệu chứng nghiêm trọng hoặc kéo dài, hãy đặt lịch khám với bác sĩ.</span>
+  </div>
+
+  <div class="chat-box">
+    <div class="messages">
+      @if (messages().length === 0) {
+        <div class="empty-chat">
+          <mat-icon>smart_toy</mat-icon>
+          <p>Bạn có thể hỏi tôi bất cứ điều gì liên quan đến sức khỏe.</p>
+          <div class="suggestions">
+            @for (s of suggestions; track s) {
+              <button class="suggestion-chip" (click)="send(s)">{{ s }}</button>
+            }
+          </div>
+        </div>
+      }
+
+      @for (m of messages(); track m.id) {
+        <div class="msg-row" [class.mine]="m.role === 'user'">
+          @if (m.role === 'assistant') {
+            <div class="avatar assistant"><mat-icon>smart_toy</mat-icon></div>
+          }
+          <div class="bubble" [class.mine]="m.role === 'user'">{{ m.content }}</div>
+        </div>
+      }
+
+      @if (sending()) {
+        <div class="msg-row">
+          <div class="avatar assistant"><mat-icon>smart_toy</mat-icon></div>
+          <div class="bubble typing"><mat-spinner diameter="16" /></div>
+        </div>
+      }
+
+      <div #scrollAnchor></div>
+    </div>
+
+    <div class="composer">
+      <input
+        [(ngModel)]="draft"
+        (keydown.enter)="send()"
+        placeholder="Nhập câu hỏi về sức khỏe..."
+        [disabled]="sending()" />
+      <button mat-icon-button color="primary" (click)="send()" [disabled]="sending() || !draft.trim()">
+        <mat-icon>send</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>

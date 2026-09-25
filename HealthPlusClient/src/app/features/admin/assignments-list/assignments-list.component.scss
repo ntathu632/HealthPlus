@@ -1,0 +1,27 @@
+.page { max-width: 1000px; margin: 0 auto; }
+.page-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px; }
+.page-title { font-size: 22px; font-weight: 700; color: var(--hp-text-primary); margin: 0 0 4px; }
+.page-subtitle { color: var(--hp-text-secondary); font-size: 14px; margin: 0; }
+.loading-center { display: flex; justify-content: center; padding: 80px 0; }
+
+.empty-state {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 80px 24px; text-align: center;
+  mat-icon { font-size: 64px; width: 64px; height: 64px; color: var(--hp-border); margin-bottom: 16px; }
+  h3 { font-size: 18px; font-weight: 600; color: var(--hp-text-primary); margin: 0 0 8px; }
+  p { color: var(--hp-text-secondary); margin: 0; font-size: 14px; }
+}
+
+.list { display: flex; flex-direction: column; gap: 10px; }
+.row-card {
+  display: flex !important; flex-direction: row !important; align-items: center; gap: 16px; padding: 14px 16px !important;
+  border-radius: 10px !important; box-shadow: var(--hp-shadow) !important;
+}
+.pair { display: flex; align-items: center; gap: 10px; flex: 1; font-size: 14px; }
+.doctor, .patient {
+  display: flex; align-items: center; gap: 6px; font-weight: 600; color: var(--hp-text-primary);
+  mat-icon { font-size: 18px; width: 18px; height: 18px; color: var(--hp-text-secondary); }
+}
+.arrow { color: var(--hp-border); font-size: 18px; width: 18px; height: 18px; }
+.since { font-size: 12px; color: var(--hp-text-secondary); flex-shrink: 0; }
+.del-btn { color: #BDBDBD !important; &:hover { color: var(--hp-danger) !important; } }

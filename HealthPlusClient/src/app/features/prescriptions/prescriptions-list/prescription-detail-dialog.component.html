@@ -1,0 +1,99 @@
+<div class="dialog-header">
+  <mat-icon>receipt_long</mat-icon>
+  <div class="header-info">
+    <h2 mat-dialog-title>Chi tiết đơn thuốc</h2>
+    <span class="header-date">{{ rx.createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
+  </div>
+  <span class="status-chip" [ngClass]="rx.status.toLowerCase()">{{ statusLabel(rx.status) }}</span>
+  <button mat-icon-button (click)="close()" class="close-btn"><mat-icon>close</mat-icon></button>
+</div>
+
+<mat-dialog-content>
+
+  <!-- Image section -->
+  @if (rx.imageUrl) {
+    <div class="image-section">
+      <img [src]="rx.imageUrl" alt="Ảnh đơn thuốc" class="rx-image" />
+      @if (rx.ocrConfidenceScore != null) {
+        <div class="ocr-badge">
+          <mat-icon>psychology</mat-icon>
+          OCR {{ (rx.ocrConfidenceScore * 100).toFixed(0) }}%
+        </div>
+      }
+    </div>
+  }
+
+  @if (!rx.imageUrl) {
+    <!-- Upload image button -->
+    <div class="upload-zone" (click)="triggerUpload()">
+      <input #fileInput type="file" accept="image/jpeg,image/png" class="hidden-input"
+        (change)="onFileSelected($event)" />
+      @if (uploading()) {
+        <mat-spinner diameter="32" />
+        <span>Đang tải ảnh...</span>
+      } @else {
+        <mat-icon>add_photo_alternate</mat-icon>
+        <span>Tải ảnh đơn thuốc (JPG/PNG, tối đa 5MB)</span>
+      }
+    </div>
+  }
+
+  <mat-divider class="my-divider" />
+
+  <!-- Items list -->
+  <div class="items-header">
+    <h3>Danh sách thuốc ({{ rx.items.length }})</h3>
+    <button mat-stroked-button color="primary" (click)="openAddItem()">
+      <mat-icon>add</mat-icon> Thêm thuốc
+    </button>
+  </div>
+
+  @if (rx.items.length === 0) {
+    <div class="empty-items">
+      <mat-icon>medication</mat-icon>
+      <p>Chưa có thuốc nào. Thêm thuốc hoặc tải ảnh để nhận diện tự động.</p>
+    </div>
+  }
+
+  @for (item of rx.items; track item.id) {
+    <div class="item-row" [class.confirmed]="item.isConfirmed">
+      <div class="item-icon" [class.confirmed]="item.isConfirmed">
+        <mat-icon>{{ item.isConfirmed ? 'check_circle' : 'medication' }}</mat-icon>
+      </div>
+      <div class="item-info">
+        <span class="item-name">{{ item.medicineName }}</span>
+        <div class="item-details">
+          @if (item.dosage) { <span class="detail-chip"><mat-icon>scale</mat-icon>{{ item.dosage }}</span> }
+          @if (item.frequencyPerDay) { <span class="detail-chip"><mat-icon>repeat</mat-icon>{{ item.frequencyPerDay }}x/ngày</span> }
+          @if (item.durationDays) { <span class="detail-chip"><mat-icon>calendar_today</mat-icon>{{ item.durationDays }} ngày</span> }
+          @if (item.timing) { <span class="detail-chip"><mat-icon>schedule</mat-icon>{{ item.timing }}</span> }
+        </div>
+        @if (item.instructions) {
+          <p class="item-instructions">{{ item.instructions }}</p>
+        }
+      </div>
+      <div class="item-actions">
+        <button mat-icon-button matTooltip="Chỉnh sửa" (click)="openEditItem(item)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Xoá" class="del-btn" (click)="deleteItem(item)">
+          <mat-icon>delete_outline</mat-icon>
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- OCR raw text -->
+  @if (rx.ocrRawText) {
+    <mat-divider class="my-divider" />
+    <details class="ocr-section">
+      <summary>Văn bản OCR nhận diện được</summary>
+      <pre class="ocr-text">{{ rx.ocrRawText }}</pre>
+    </details>
+  }
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="close()">Đóng</button>
+</mat-dialog-actions>

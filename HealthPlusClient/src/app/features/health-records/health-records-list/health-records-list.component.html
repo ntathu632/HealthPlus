@@ -1,0 +1,90 @@
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h2 class="page-title">Hồ sơ sức khỏe</h2>
+      <p class="page-subtitle">Quản lý hồ sơ cho bạn và gia đình</p>
+    </div>
+    <button mat-raised-button color="primary" (click)="openCreate()">
+      <mat-icon>add</mat-icon> Thêm hồ sơ
+    </button>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-center"><mat-spinner diameter="48" /></div>
+  }
+
+  @if (!loading() && records().length === 0) {
+    <div class="empty-state">
+      <mat-icon>folder_open</mat-icon>
+      <h3>Chưa có hồ sơ nào</h3>
+      <p>Tạo hồ sơ để bắt đầu theo dõi sức khỏe</p>
+      <button mat-raised-button color="primary" (click)="openCreate()">
+        <mat-icon>add</mat-icon> Tạo hồ sơ đầu tiên
+      </button>
+    </div>
+  }
+
+  @if (!loading() && records().length > 0) {
+    <div class="records-grid">
+      @for (record of records(); track record.id) {
+        <mat-card class="record-card" [routerLink]="[record.id]">
+          <div class="card-top">
+            <div class="avatar" [style.background]="getAvatarColor(record.gender)">
+              <mat-icon>{{ record.gender === 'Male' ? 'man' : record.gender === 'Female' ? 'woman' : 'person' }}</mat-icon>
+            </div>
+            <div class="card-name">
+              <span class="profile-name">{{ record.profileName }}</span>
+              <span class="full-name">{{ record.fullName }}</span>
+            </div>
+            <button mat-icon-button (click)="openEdit(record, $event)" class="edit-btn">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </div>
+
+          <div class="chips-row">
+            <span class="info-chip age">{{ calcAge(record.dateOfBirth) }} tuổi</span>
+            @if (record.bloodType) {
+              <span class="info-chip blood">🩸 {{ bloodTypeLabel(record.bloodType) }}</span>
+            }
+            <span class="info-chip gender"
+              [class.male]="record.gender === 'Male'"
+              [class.female]="record.gender === 'Female'">
+              {{ record.gender === 'Male' ? 'Nam' : record.gender === 'Female' ? 'Nữ' : 'Khác' }}
+            </span>
+          </div>
+
+          @if (record.latestMetric) {
+            <div class="metrics-row">
+              @if (record.latestMetric.bmi) {
+                <div class="metric-item">
+                  <span class="metric-val" [class]="bmiClass(record.latestMetric.bmi)">
+                    {{ record.latestMetric.bmi | number:'1.1-1' }}
+                  </span>
+                  <span class="metric-lbl">BMI</span>
+                </div>
+              }
+              @if (record.latestMetric.weightKg) {
+                <div class="metric-item">
+                  <span class="metric-val">{{ record.latestMetric.weightKg }}</span>
+                  <span class="metric-lbl">kg</span>
+                </div>
+              }
+              @if (record.latestMetric.heartRate) {
+                <div class="metric-item">
+                  <span class="metric-val">{{ record.latestMetric.heartRate }}</span>
+                  <span class="metric-lbl">bpm</span>
+                </div>
+              }
+              <span class="metric-date">{{ record.latestMetric.measuredAt | date:'dd/MM/yy' }}</span>
+            </div>
+          } @else {
+            <div class="no-metrics">
+              <mat-icon>add_circle_outline</mat-icon>
+              <span>Chưa có chỉ số đo</span>
+            </div>
+          }
+        </mat-card>
+      }
+    </div>
+  }
+</div>

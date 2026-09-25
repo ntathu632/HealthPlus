@@ -1,0 +1,114 @@
+<div class="dialog-header">
+  <div class="header-date">
+    <span class="h-day">{{ item.visitDate | date:'dd' }}</span>
+    <span class="h-month">{{ item.visitDate | date:'MMM yyyy' }}</span>
+  </div>
+  <div class="header-info">
+    <h2 mat-dialog-title>{{ item.hospital || 'Không rõ địa điểm' }}</h2>
+    @if (item.doctorName) { <p>{{ item.doctorName }}</p> }
+  </div>
+  <button mat-icon-button mat-dialog-close><mat-icon>close</mat-icon></button>
+</div>
+
+<mat-dialog-content class="detail-content">
+
+  <!-- Chips row -->
+  <div class="chips-row">
+    @if (item.specialty) {
+      <span class="chip specialty"><mat-icon>medical_services</mat-icon>{{ item.specialty }}</span>
+    }
+    @if (item.followUpDate) {
+      <span class="chip followup" [class.urgent]="isUpcoming()">
+        <mat-icon>event_repeat</mat-icon>
+        Tái khám: {{ item.followUpDate | date:'dd/MM/yyyy' }}
+        @if (isUpcoming()) { <b>(còn {{ daysUntil() }} ngày)</b> }
+      </span>
+    }
+  </div>
+
+  <mat-divider />
+
+  <!-- Diagnosis -->
+  @if (item.diagnosis) {
+    <div class="detail-section">
+      <div class="section-label">
+        <mat-icon>assignment</mat-icon> Chẩn đoán
+      </div>
+      <p class="section-text">{{ item.diagnosis }}</p>
+    </div>
+  }
+
+  <!-- Treatment -->
+  @if (item.treatment) {
+    <div class="detail-section">
+      <div class="section-label">
+        <mat-icon>healing</mat-icon> Điều trị
+      </div>
+      <p class="section-text">{{ item.treatment }}</p>
+    </div>
+  }
+
+  <!-- Notes -->
+  @if (item.notes) {
+    <div class="detail-section">
+      <div class="section-label">
+        <mat-icon>notes</mat-icon> Ghi chú
+      </div>
+      <p class="section-text">{{ item.notes }}</p>
+    </div>
+  }
+
+  <mat-divider />
+
+  <!-- Document Upload -->
+  <div class="detail-section">
+    <div class="section-label">
+      <mat-icon>attach_file</mat-icon> Tài liệu đính kèm
+      <button mat-stroked-button (click)="fileInput.click()" [disabled]="uploading()">
+        <mat-icon>upload</mat-icon> Tải lên
+      </button>
+    </div>
+
+    @if (uploading()) {
+      <mat-progress-bar mode="indeterminate" class="upload-bar" />
+      <p class="upload-hint">Đang tải lên {{ uploadingFile() }}...</p>
+    }
+
+    <input #fileInput type="file" hidden
+      accept=".jpg,.jpeg,.png,.pdf"
+      (change)="onFileSelected($event)" />
+
+    @if (uploadedDocs().length === 0 && !uploading()) {
+      <p class="no-docs">
+        <mat-icon>cloud_upload</mat-icon>
+        Hỗ trợ JPG, PNG, PDF (tối đa 10MB)
+      </p>
+    }
+
+    @for (doc of uploadedDocs(); track doc.id) {
+      <div class="doc-item">
+        <mat-icon class="doc-icon">{{ getDocIcon(doc.fileType) }}</mat-icon>
+        <div class="doc-info">
+          <span class="doc-name">{{ doc.fileName }}</span>
+          <span class="doc-meta">{{ formatSize(doc.fileSizeBytes) }}</span>
+        </div>
+        <a mat-icon-button [href]="getDocUrl(doc.fileUrl)" target="_blank" matTooltip="Xem">
+          <mat-icon>open_in_new</mat-icon>
+        </a>
+      </div>
+    }
+  </div>
+
+  <!-- Meta -->
+  <div class="meta-row">
+    <span>Tạo lúc: {{ item.createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
+    @if (item.updatedAt !== item.createdAt) {
+      <span>Cập nhật: {{ item.updatedAt | date:'dd/MM/yyyy HH:mm' }}</span>
+    }
+  </div>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Đóng</button>
+</mat-dialog-actions>

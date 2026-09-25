@@ -1,0 +1,57 @@
+<div class="page">
+  <div class="page-header">
+    <h2 class="page-title">Nhật ký hệ thống</h2>
+    <p class="page-subtitle">Lịch sử thao tác trên hệ thống</p>
+  </div>
+
+  <div class="filters">
+    <mat-form-field appearance="outline" class="entity-field">
+      <mat-label>Lọc theo entity</mat-label>
+      <input matInput [(ngModel)]="entityFilter" (ngModelChange)="onFilterChange()" placeholder="vd: HealthRecord" />
+    </mat-form-field>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-center"><mat-spinner diameter="48" /></div>
+  }
+
+  @if (!loading() && logs().length === 0) {
+    <div class="empty-state">
+      <mat-icon>history</mat-icon>
+      <h3>Chưa có nhật ký nào</h3>
+      <p>Nhật ký thao tác sẽ hiển thị tại đây khi có dữ liệu</p>
+    </div>
+  }
+
+  @if (!loading() && logs().length > 0) {
+    <div class="table-wrap">
+      <table class="logs-table">
+        <thead>
+          <tr><th>Thời gian</th><th>Người dùng</th><th>Hành động</th><th>Entity</th><th>Entity ID</th><th>IP</th></tr>
+        </thead>
+        <tbody>
+          @for (l of logs(); track l.id) {
+            <tr>
+              <td>{{ l.createdAt | date:'dd/MM/yyyy HH:mm' }}</td>
+              <td>{{ l.userEmail || '—' }}</td>
+              <td>{{ l.action }}</td>
+              <td>{{ l.entity || '—' }}</td>
+              <td>{{ l.entityId || '—' }}</td>
+              <td>{{ l.ipAddress || '—' }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pagination">
+      <button mat-stroked-button [disabled]="page === 1" (click)="prevPage()">
+        <mat-icon>chevron_left</mat-icon> Trước
+      </button>
+      <span>Trang {{ page }} / {{ totalPages() }}</span>
+      <button mat-stroked-button [disabled]="page >= totalPages()" (click)="nextPage()">
+        Sau <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+  }
+</div>

@@ -1,0 +1,156 @@
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h2 class="page-title">Tài khoản của tôi</h2>
+      <p class="page-subtitle">Quản lý thông tin cá nhân và bảo mật</p>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-center"><mat-spinner diameter="36" /></div>
+  } @else {
+
+    <mat-card class="profile-card">
+      <div class="avatar-section">
+        <div class="avatar-wrap" (click)="triggerAvatarUpload()">
+          @if (user()?.avatarUrl) {
+            <img [src]="user()!.avatarUrl" alt="Avatar" class="avatar-img" />
+          } @else {
+            <div class="avatar-fallback">{{ initials() }}</div>
+          }
+          <div class="avatar-overlay">
+            @if (uploadingAvatar()) {
+              <mat-spinner diameter="22" color="accent" />
+            } @else {
+              <mat-icon>photo_camera</mat-icon>
+            }
+          </div>
+        </div>
+        <input #avatarInput type="file" accept="image/jpeg,image/png" class="hidden-input"
+          (change)="onAvatarSelected($event)" />
+        <div class="avatar-info">
+          <h3>{{ user()?.fullName }}</h3>
+          <p>{{ user()?.email }}</p>
+        </div>
+      </div>
+
+      <mat-divider class="my-divider" />
+
+      <form [formGroup]="profileForm" class="form-grid">
+        <p class="section-label">Thông tin cá nhân</p>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Họ tên</mat-label>
+          <input matInput formControlName="fullName" />
+          @if (profileForm.get('fullName')?.hasError('required') && profileForm.get('fullName')?.touched) {
+            <mat-error>Vui lòng nhập họ tên</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput [value]="user()?.email" disabled />
+          <mat-hint>Không thể thay đổi email</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Số điện thoại</mat-label>
+          <input matInput formControlName="phoneNumber" placeholder="0912345678" />
+        </mat-form-field>
+
+        @if (auth.isDoctor()) {
+          <p class="section-label full-width">Thông tin chuyên môn</p>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Chuyên khoa</mat-label>
+            <mat-select formControlName="specialty">
+              <mat-option value="">-- Chọn chuyên khoa --</mat-option>
+              @for (s of specialties; track s) {
+                <mat-option [value]="s">{{ s }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Bệnh viện / Phòng khám</mat-label>
+            <mat-select formControlName="hospitalId">
+              <mat-option value="">-- Chưa chọn --</mat-option>
+              @for (h of hospitals(); track h.id) {
+                <mat-option [value]="h.id">{{ h.name }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Phí tư vấn (đ / lượt)</mat-label>
+            <input matInput type="number" min="0" formControlName="consultationFee" />
+            <mat-hint>Để 0 nếu tư vấn miễn phí</mat-hint>
+          </mat-form-field>
+        }
+
+        <div class="full-width actions-row">
+          <button mat-raised-button color="primary" (click)="saveProfile()"
+            [disabled]="savingProfile() || profileForm.invalid">
+            @if (savingProfile()) { <mat-spinner diameter="18" /> } @else { Lưu thay đổi }
+          </button>
+        </div>
+      </form>
+    </mat-card>
+
+    <mat-card class="profile-card">
+      <form [formGroup]="passwordForm" class="form-grid">
+        <p class="section-label">Đổi mật khẩu</p>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Mật khẩu hiện tại</mat-label>
+          <input matInput type="password" formControlName="currentPassword" />
+          @if (passwordForm.get('currentPassword')?.hasError('required') && passwordForm.get('currentPassword')?.touched) {
+            <mat-error>Vui lòng nhập mật khẩu hiện tại</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Mật khẩu mới</mat-label>
+          <input matInput type="password" formControlName="newPassword" />
+          @if (passwordForm.get('newPassword')?.hasError('required') && passwordForm.get('newPassword')?.touched) {
+            <mat-error>Vui lòng nhập mật khẩu mới</mat-error>
+          } @else if (passwordForm.get('newPassword')?.hasError('minlength') && passwordForm.get('newPassword')?.touched) {
+            <mat-error>Ít nhất 8 ký tự</mat-error>
+          }
+          <mat-hint>Ít nhất 8 ký tự, có chữ hoa và chữ số</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Xác nhận mật khẩu mới</mat-label>
+          <input matInput type="password" formControlName="confirmPassword" />
+          @if (passwordForm.hasError('passwordMismatch') && passwordForm.get('confirmPassword')?.touched) {
+            <mat-error>Mật khẩu xác nhận không khớp</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="full-width actions-row">
+          <button mat-raised-button color="primary" (click)="changePassword()"
+            [disabled]="savingPassword() || passwordForm.invalid">
+            @if (savingPassword()) { <mat-spinner diameter="18" /> } @else { Đổi mật khẩu }
+          </button>
+        </div>
+      </form>
+    </mat-card>
+
+    <mat-card class="profile-card meta-card">
+      <p class="section-label">Thông tin khác</p>
+      <div class="meta-row">
+        <span>Trạng thái email</span>
+        <span class="meta-value">{{ user()?.isEmailVerified ? 'Đã xác thực' : 'Chưa xác thực' }}</span>
+      </div>
+      <div class="meta-row">
+        <span>Đăng nhập gần nhất</span>
+        <span class="meta-value">{{ user()?.lastLoginAt ? (user()!.lastLoginAt | date:'dd/MM/yyyy HH:mm') : '—' }}</span>
+      </div>
+      <div class="meta-row">
+        <span>Ngày tạo tài khoản</span>
+        <span class="meta-value">{{ user()?.createdAt | date:'dd/MM/yyyy' }}</span>
+      </div>
+    </mat-card>
+  }
+</div>

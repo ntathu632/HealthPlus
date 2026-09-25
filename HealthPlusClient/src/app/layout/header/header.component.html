@@ -1,0 +1,38 @@
+<header class="header">
+  <button class="icon-btn menu-btn" (click)="toggleSidenav.emit()">
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  <div class="spacer"></div>
+
+  <div class="avatar-btn" [matMenuTriggerFor]="userMenu">
+    @if (auth.user()?.avatarUrl) {
+      <img [src]="auth.user()!.avatarUrl" alt="Avatar" class="avatar-img" />
+    } @else {
+      {{ initials() }}
+    }
+  </div>
+
+  <mat-menu #userMenu="matMenu" xPosition="before">
+    <div class="menu-header">
+      <div class="menu-avatar">
+        @if (auth.user()?.avatarUrl) {
+          <img [src]="auth.user()!.avatarUrl" alt="Avatar" class="avatar-img" />
+        } @else {
+          {{ initials() }}
+        }
+      </div>
+      <div>
+        <p class="menu-name">{{ auth.currentUserName() }}</p>
+        <p class="menu-role">Người dùng</p>
+      </div>
+    </div>
+    <div class="menu-divider"></div>
+    <button mat-menu-item routerLink="/profile">
+      <mat-icon>manage_accounts</mat-icon> Tài khoản
+    </button>
+    <button mat-menu-item (click)="auth.logout()" style="color:#D32F2F">
+      <mat-icon style="color:#D32F2F">logout</mat-icon> Đăng xuất
+    </button>
+  </mat-menu>
+</header>

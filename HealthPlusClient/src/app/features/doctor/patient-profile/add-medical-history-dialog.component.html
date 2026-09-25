@@ -1,0 +1,84 @@
+<div class="dialog-header">
+  <mat-icon>{{ isEdit ? 'edit_calendar' : 'add_circle' }}</mat-icon>
+  <h2 mat-dialog-title>{{ isEdit ? 'Sửa chẩn đoán' : 'Thêm chẩn đoán' }}</h2>
+  <button mat-icon-button mat-dialog-close class="close-btn"><mat-icon>close</mat-icon></button>
+</div>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="form-grid">
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Hồ sơ sức khỏe</mat-label>
+      <mat-select formControlName="healthRecordId">
+        @for (r of data.healthRecords; track r.id) {
+          <mat-option [value]="r.id">{{ r.profileName }} — {{ r.fullName }}</mat-option>
+        }
+      </mat-select>
+      @if (form.get('healthRecordId')?.hasError('required') && form.get('healthRecordId')?.touched) {
+        <mat-error>Vui lòng chọn hồ sơ</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Ngày khám</mat-label>
+      <input matInput type="date" formControlName="visitDate" />
+      @if (form.get('visitDate')?.hasError('required') && form.get('visitDate')?.touched) {
+        <mat-error>Bắt buộc nhập</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Ngày tái khám</mat-label>
+      <input matInput type="date" formControlName="followUpDate" />
+      <mat-hint>Để trống nếu không có</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Bệnh viện / Phòng khám</mat-label>
+      <input matInput formControlName="hospital" />
+      <mat-icon matSuffix>local_hospital</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Bác sĩ</mat-label>
+      <input matInput formControlName="doctorName" placeholder="BS. Nguyễn Văn A" />
+      <mat-icon matSuffix>person</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Chuyên khoa</mat-label>
+      <mat-select formControlName="specialty">
+        <mat-option value="">-- Chọn chuyên khoa --</mat-option>
+        @for (s of specialties; track s) {
+          <mat-option [value]="s">{{ s }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Chẩn đoán</mat-label>
+      <textarea matInput formControlName="diagnosis" rows="3"
+        placeholder="Mô tả chẩn đoán..."></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Phương pháp điều trị</mat-label>
+      <textarea matInput formControlName="treatment" rows="3"
+        placeholder="Thuốc, thủ thuật, phẫu thuật..."></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Ghi chú</mat-label>
+      <textarea matInput formControlName="notes" rows="2"></textarea>
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Huỷ</button>
+  <button mat-raised-button color="primary" (click)="submit()" [disabled]="loading() || form.invalid">
+    @if (loading()) { <mat-spinner diameter="18" /> }
+    @else { {{ isEdit ? 'Lưu thay đổi' : 'Thêm chẩn đoán' }} }
+  </button>
+</mat-dialog-actions>

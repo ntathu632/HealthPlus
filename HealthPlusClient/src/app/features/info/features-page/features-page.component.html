@@ -1,0 +1,24 @@
+<app-info-page-layout
+  title="Tính năng"
+  subtitle="Mọi công cụ quản lý sức khỏe bạn cần, gom lại trong một nơi"
+  icon="auto_awesome">
+
+  <div class="feature-list">
+    @for (f of features; track f.title) {
+      <div class="feature-block">
+        <div class="feature-icon" [style.background]="f.color + '1A'">
+          <mat-icon [style.color]="f.color">{{ f.icon }}</mat-icon>
+        </div>
+        <div class="feature-text">
+          <h2>{{ f.title }}</h2>
+          <p class="feature-desc">{{ f.desc }}</p>
+          <ul>
+            @for (p of f.points; track p) {
+              <li><mat-icon>check_circle</mat-icon> {{ p }}</li>
+            }
+          </ul>
+        </div>
+      </div>
+    }
+  </div>
+</app-info-page-layout>

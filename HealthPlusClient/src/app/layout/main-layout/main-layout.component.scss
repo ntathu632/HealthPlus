@@ -1,0 +1,14 @@
+.layout-container { height: 100vh; }
+
+.sidebar-nav {
+  width: var(--hp-sidebar-width);
+  background: white;
+  border-radius: 0 !important;
+}
+::ng-deep .mat-drawer { border-radius: 0 !important; }
+
+.main-content { background: #F0F4F8; }
+.page-content {
+  padding: 24px 28px;
+  min-height: calc(100vh - var(--hp-header-height));
+}

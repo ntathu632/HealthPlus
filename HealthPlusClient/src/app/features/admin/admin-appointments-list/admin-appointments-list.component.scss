@@ -1,0 +1,47 @@
+.page { max-width: 1200px; margin: 0 auto; }
+.page-header { margin-bottom: 16px; }
+.page-title { font-size: 22px; font-weight: 700; color: var(--hp-text-primary); margin: 0 0 4px; }
+.page-subtitle { color: var(--hp-text-secondary); font-size: 14px; margin: 0; }
+.loading-center { display: flex; justify-content: center; padding: 80px 0; }
+
+.status-tabs { display: flex; align-items: center; gap: 4px; margin-bottom: 16px; flex-wrap: nowrap; overflow-x: auto; padding-bottom: 2px; }
+.status-tab {
+  padding: 6px 14px; border-radius: 20px; border: 1px solid var(--hp-border);
+  background: white; cursor: pointer; font-size: 13px; color: var(--hp-text-secondary);
+  white-space: nowrap; flex-shrink: 0;
+  transition: all 0.2s;
+  &:hover { background: var(--hp-primary-light, #E3F2FD); }
+  &.active { background: var(--hp-primary); color: white; border-color: var(--hp-primary); }
+}
+
+.empty-state {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 80px 24px; text-align: center;
+  mat-icon { font-size: 64px; width: 64px; height: 64px; color: var(--hp-border); margin-bottom: 16px; }
+  h3 { font-size: 18px; font-weight: 600; color: var(--hp-text-primary); margin: 0; }
+}
+
+.table-wrap {
+  overflow-x: auto; background: white; border-radius: var(--hp-radius, 12px);
+  box-shadow: var(--hp-shadow); margin-bottom: 16px;
+}
+.appt-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.appt-table th {
+  text-align: left; padding: 12px 14px; color: var(--hp-text-secondary);
+  font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.4px;
+  border-bottom: 1px solid var(--hp-border); white-space: nowrap;
+}
+.appt-table td { padding: 10px 14px; border-bottom: 1px solid var(--hp-border); white-space: nowrap; }
+
+.status-chip {
+  padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600;
+  &.pending    { background: #FCE4EC; color: #AD1457; }
+  &.confirmed  { background: #E3F2FD; color: #1565C0; }
+  &.completed  { background: #BBDEFB; color: #0D47A1; }
+  &.cancelled  { background: #FFEBEE; color: #C62828; }
+}
+
+.pagination {
+  display: flex; align-items: center; justify-content: center; gap: 16px;
+  font-size: 13px; color: var(--hp-text-secondary);
+}

@@ -1,0 +1,144 @@
+<div class="auth-page">
+
+  <!-- Left brand panel -->
+  <div class="brand-panel">
+    <div class="blob" style="width:220px;height:220px;background:#90CAF9;top:-30px;right:-50px"></div>
+    <div class="blob" style="width:160px;height:160px;background:#FFCDD2;bottom:10px;left:-50px;animation-delay:1.5s"></div>
+
+    <div class="brand-content">
+      <a routerLink="/" class="brand-logo-link">
+        <div class="brand-logo">
+          <div class="logo-cross">
+            <span class="cross-h"></span>
+            <span class="cross-v"></span>
+          </div>
+          <mat-icon class="heart-icon">favorite</mat-icon>
+        </div>
+        <h1 class="brand-name">Health<span class="brand-plus">+</span></h1>
+      </a>
+      <p class="brand-tagline">Tạo tài khoản để bắt đầu<br/>hành trình sức khỏe</p>
+
+      <div class="photo-visual">
+        <div class="mock-card">
+          <div class="mock-header">
+            <div class="mock-avatar"></div>
+            <div class="mock-lines">
+              <div class="mock-line" style="width:60%;background:var(--gray-200)"></div>
+              <div class="mock-line" style="width:40%"></div>
+            </div>
+          </div>
+          <div class="mock-stats">
+            <div class="mock-stat">
+              <span class="mock-stat-value">36.5°</span>
+              <span class="mock-stat-label">Thân nhiệt</span>
+            </div>
+            <div class="mock-stat">
+              <span class="mock-stat-value">72</span>
+              <span class="mock-stat-label">Nhịp tim</span>
+            </div>
+          </div>
+          <svg class="mock-wave" viewBox="0 0 240 60" preserveAspectRatio="none">
+            <path d="M0,30 L40,30 L55,10 L70,50 L85,20 L100,30 L240,30"
+              fill="none" stroke="#1565C0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <div class="mock-row"></div>
+          <div class="mock-row" style="width:70%"></div>
+        </div>
+        <div class="float-badge" style="top:-16px;left:-16px;animation-delay:0.3s"><mat-icon>monitor_heart</mat-icon></div>
+        <div class="float-badge" style="bottom:-16px;right:-16px;animation-delay:1s"><mat-icon>medication</mat-icon></div>
+      </div>
+
+      <div class="brand-chips">
+        <span class="chip"><mat-icon>lock</mat-icon> Bảo mật dữ liệu</span>
+        <span class="chip"><mat-icon>bolt</mat-icon> Miễn phí sử dụng</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right form panel -->
+  <div class="form-panel">
+    <div class="form-box">
+      <a routerLink="/" class="back-home-link">
+        <mat-icon>arrow_back</mat-icon> Về trang chủ
+      </a>
+
+      <div class="form-header">
+        <h2>Đăng ký</h2>
+        <p>Điền thông tin để tạo tài khoản</p>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="auth-form">
+        <mat-form-field appearance="outline">
+          <mat-label>Họ và tên</mat-label>
+          <input matInput formControlName="fullName" />
+          <mat-icon matSuffix>person</mat-icon>
+          @if (form.get('fullName')?.hasError('required') && form.get('fullName')?.touched) {
+            <mat-error>Vui lòng nhập họ tên</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" formControlName="email" />
+          <mat-icon matSuffix>email</mat-icon>
+          @if (form.get('email')?.hasError('email') && form.get('email')?.touched) {
+            <mat-error>Email không hợp lệ</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Số điện thoại (tuỳ chọn)</mat-label>
+          <input matInput formControlName="phoneNumber" />
+          <mat-icon matSuffix>phone</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Mật khẩu</mat-label>
+          <input matInput [type]="showPassword() ? 'text' : 'password'" formControlName="password" />
+          <button mat-icon-button matSuffix type="button" (click)="showPassword.set(!showPassword())">
+            <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-hint>Ít nhất 8 ký tự, có 1 chữ HOA và 1 chữ số (VD: Abc12345)</mat-hint>
+          @if (form.get('password')?.hasError('minlength') && form.get('password')?.touched) {
+            <mat-error>Ít nhất 8 ký tự, có 1 chữ HOA và 1 chữ số</mat-error>
+          }
+        </mat-form-field>
+
+        @if (errorMsg()) {
+          <div class="error-alert">
+            <mat-icon>error_outline</mat-icon>
+            {{ errorMsg() }}
+          </div>
+        }
+
+        <button mat-raised-button type="submit"
+          [disabled]="loading() || form.invalid" class="submit-btn">
+          @if (loading()) { <mat-spinner diameter="20" /> }
+          @else { Tạo tài khoản }
+        </button>
+      </form>
+
+      <div class="social-divider"><span>hoặc đăng ký bằng</span></div>
+
+      <div class="social-row">
+        <div class="social-btn google-btn-slot" #googleBtn aria-label="Đăng ký bằng Google"></div>
+        <button type="button" class="social-btn" (click)="socialLogin('Facebook')" aria-label="Đăng ký bằng Facebook">
+          <svg viewBox="0 0 24 24" width="20" height="20">
+            <path fill="#1877F2" d="M24 12.07C24 5.68 18.63.5 12 .5S0 5.68 0 12.07c0 5.77 4.39 10.56 10.13 11.43v-8.09H7.08v-3.34h3.05V9.41c0-2.99 1.79-4.64 4.53-4.64 1.31 0 2.68.23 2.68.23v2.92h-1.51c-1.49 0-1.95.92-1.95 1.86v2.24h3.32l-.53 3.34h-2.79v8.09C19.61 22.63 24 17.84 24 12.07Z"/>
+          </svg>
+        </button>
+        <button type="button" class="social-btn" (click)="socialLogin('Apple')" aria-label="Đăng ký bằng Apple">
+          <svg viewBox="0 0 24 24" width="20" height="20">
+            <path fill="#000000" d="M17.05 12.54c-.02-2.13 1.74-3.15 1.82-3.2-1-1.45-2.54-1.65-3.09-1.67-1.31-.13-2.56.77-3.23.77-.66 0-1.7-.75-2.79-.73-1.44.02-2.76.84-3.5 2.13-1.5 2.6-.38 6.45 1.07 8.56.71 1.03 1.56 2.19 2.67 2.15 1.07-.04 1.48-.69 2.77-.69 1.29 0 1.66.69 2.79.67 1.16-.02 1.89-1.05 2.6-2.09.82-1.2 1.15-2.36 1.17-2.42-.03-.01-2.24-.86-2.26-3.4Z"/>
+            <path fill="#000000" d="M15.09 6.09c.6-.72 1-1.72.89-2.72-.86.03-1.9.57-2.52 1.28-.55.63-1.03 1.65-.9 2.62.95.07 1.92-.48 2.53-1.18Z"/>
+          </svg>
+        </button>
+      </div>
+
+      <p class="auth-link">
+        Đã có tài khoản? <a routerLink="/auth/login">Đăng nhập</a>
+      </p>
+    </div>
+  </div>
+
+</div>

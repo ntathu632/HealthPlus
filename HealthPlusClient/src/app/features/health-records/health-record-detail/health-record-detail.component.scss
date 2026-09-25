@@ -1,0 +1,93 @@
+.page { max-width: 1100px; margin: 0 auto; }
+.page-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+.back-btn { color: var(--hp-text-secondary); }
+.header-info { flex: 1; }
+.page-title   { font-size: 20px; font-weight: 700; color: var(--hp-text-primary); margin: 0 0 2px; }
+.page-subtitle{ color: var(--hp-text-secondary); font-size: 14px; margin: 0; }
+.loading-center { display: flex; justify-content: center; padding: 60px 0; }
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 20px;
+}
+@media (max-width: 768px) { .detail-grid { grid-template-columns: 1fr; } }
+
+.info-card { display: flex; flex-direction: column; align-items: center; }
+.card-avatar {
+  width: 72px; height: 72px; border-radius: 20px; margin-bottom: 20px;
+  display: flex; align-items: center; justify-content: center;
+  mat-icon { color: white; font-size: 36px; width: 36px; height: 36px; }
+}
+.info-rows { width: 100%; }
+.info-row {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  padding: 8px 0; border-bottom: 1px solid var(--hp-border);
+  &:last-child { border-bottom: none; }
+}
+.lbl  { font-size: 13px; color: var(--hp-text-secondary); flex-shrink: 0; margin-right: 8px; }
+.val  { font-size: 13px; font-weight: 500; color: var(--hp-text-primary); text-align: right; }
+.val.blood { color: #C62828; }
+.val.warn  { color: #AD1457; }
+
+.metrics-summary { grid-column: 2; }
+@media (max-width: 768px) { .metrics-summary { grid-column: 1; } }
+
+.card-title {
+  font-size: 15px; font-weight: 600; color: var(--hp-text-primary);
+  margin: 0 0 16px; display: flex; align-items: center; gap: 8px;
+}
+.date-chip {
+  font-size: 12px; font-weight: 400; color: var(--hp-text-secondary);
+  background: var(--hp-bg); padding: 2px 8px; border-radius: 20px;
+}
+.metrics-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 12px;
+}
+.metric-box {
+  background: var(--hp-bg); border-radius: 12px; padding: 14px 8px;
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+}
+.metric-box.bmi-normal      { background: #BBDEFB; }
+.metric-box.bmi-overweight  { background: #FCE4EC; }
+.metric-box.bmi-obese       { background: #FFEBEE; }
+.metric-box.bmi-underweight { background: #E3F2FD; }
+.m-val    { font-size: 20px; font-weight: 700; color: var(--hp-text-primary); }
+.m-lbl    { font-size: 11px; color: var(--hp-text-secondary); margin-top: 2px; }
+.m-status { font-size: 10px; font-weight: 600; margin-top: 4px; }
+.metric-box.bmi-normal .m-status      { color: #0D47A1; }
+.metric-box.bmi-overweight .m-status  { color: #AD1457; }
+.metric-box.bmi-obese .m-status       { color: #C62828; }
+.metric-box.bmi-underweight .m-status { color: #1565C0; }
+
+.chart-card { grid-column: 1 / -1; }
+.history-card { grid-column: 1 / -1; }
+
+.card-title-row {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;
+}
+.empty-small {
+  display: flex; align-items: center; gap: 10px;
+  padding: 24px; color: var(--hp-text-secondary); justify-content: center;
+  mat-icon { opacity: 0.4; font-size: 28px; width: 28px; height: 28px; }
+}
+.metrics-list { display: flex; flex-direction: column; }
+.metric-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 0; border-bottom: 1px solid var(--hp-border);
+  &:last-child { border-bottom: none; }
+}
+.metric-date-col { display: flex; flex-direction: column; min-width: 80px; }
+.m-date { font-size: 13px; font-weight: 600; color: var(--hp-text-primary); }
+.m-time { font-size: 11px; color: var(--hp-text-secondary); }
+.metric-values { flex: 1; display: flex; flex-wrap: wrap; gap: 6px; }
+.mv-chip {
+  padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 500;
+  background: var(--hp-bg); color: var(--hp-text-primary);
+}
+.mv-chip.bmi.bmi-normal      { background: #BBDEFB; color: #0D47A1; }
+.mv-chip.bmi.bmi-overweight  { background: #FCE4EC; color: #AD1457; }
+.mv-chip.bmi.bmi-obese       { background: #FFEBEE; color: #C62828; }
+.mv-chip.bmi.bmi-underweight { background: #E3F2FD; color: #1565C0; }
+.del-btn { color: #BDBDBD !important; }
+.del-btn:hover { color: var(--hp-danger) !important; }

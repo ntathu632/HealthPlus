@@ -1,0 +1,80 @@
+<div class="dialog-header">
+  <mat-icon>monitor_heart</mat-icon>
+  <h2 mat-dialog-title>Thêm chỉ số đo</h2>
+  <button mat-icon-button mat-dialog-close class="close-btn"><mat-icon>close</mat-icon></button>
+</div>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="metric-form">
+
+    <!-- BMI preview -->
+    @if (bmiPreview()) {
+      <div class="bmi-preview" [class]="bmiPreviewClass()">
+        <span class="bmi-val">{{ bmiPreview() | number:'1.1-1' }}</span>
+        <span class="bmi-label">BMI — {{ bmiStatus() }}</span>
+      </div>
+    }
+
+    <div class="section-label">Chiều cao & Cân nặng</div>
+    <div class="two-col">
+      <mat-form-field appearance="outline">
+        <mat-label>Chiều cao (cm)</mat-label>
+        <input matInput type="number" formControlName="heightCm" min="50" max="250" />
+        <mat-icon matSuffix>height</mat-icon>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Cân nặng (kg)</mat-label>
+        <input matInput type="number" formControlName="weightKg" min="1" max="300" />
+        <mat-icon matSuffix>monitor_weight</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <div class="section-label">Huyết áp</div>
+    <div class="two-col">
+      <mat-form-field appearance="outline">
+        <mat-label>Tâm thu (mmHg)</mat-label>
+        <input matInput type="number" formControlName="systolicBp" min="60" max="260" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Tâm trương (mmHg)</mat-label>
+        <input matInput type="number" formControlName="diastolicBp" min="40" max="160" />
+      </mat-form-field>
+    </div>
+
+    <div class="section-label">Các chỉ số khác</div>
+    <div class="three-col">
+      <mat-form-field appearance="outline">
+        <mat-label>Nhịp tim (bpm)</mat-label>
+        <input matInput type="number" formControlName="heartRate" min="30" max="250" />
+        <mat-icon matSuffix>favorite</mat-icon>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Đường huyết (mmol/L)</mat-label>
+        <input matInput type="number" formControlName="bloodSugar" step="0.1" min="1" max="40" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Nhiệt độ (°C)</mat-label>
+        <input matInput type="number" formControlName="temperature" step="0.1" min="34" max="43" />
+        <mat-icon matSuffix>thermostat</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Thời điểm đo</mat-label>
+      <input matInput type="datetime-local" formControlName="measuredAt" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Ghi chú</mat-label>
+      <textarea matInput formControlName="notes" rows="2"></textarea>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Huỷ</button>
+  <button mat-raised-button color="primary" (click)="submit()" [disabled]="loading() || !hasAnyValue()">
+    @if (loading()) { <mat-spinner diameter="18" /> }
+    @else { Lưu chỉ số }
+  </button>
+</mat-dialog-actions>

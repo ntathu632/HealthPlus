@@ -1,0 +1,88 @@
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h2 class="page-title">Người dùng</h2>
+      <p class="page-subtitle">Quản lý tài khoản, vai trò và trạng thái người dùng</p>
+    </div>
+    <button mat-raised-button color="primary" (click)="openCreateUser()">
+      <mat-icon>add</mat-icon> Tạo tài khoản mới
+    </button>
+  </div>
+
+  <div class="filters">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Tìm theo tên/email</mat-label>
+      <input matInput [(ngModel)]="search" (ngModelChange)="onSearchChange()" />
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="role-field">
+      <mat-label>Vai trò</mat-label>
+      <mat-select [(ngModel)]="roleFilter" (ngModelChange)="reload()">
+        <mat-option [value]="undefined">Tất cả</mat-option>
+        @for (r of roleOptions; track r.id) {
+          <mat-option [value]="r.id">{{ r.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-center"><mat-spinner diameter="48" /></div>
+  }
+
+  @if (!loading() && users().length === 0) {
+    <div class="empty-state">
+      <mat-icon>group_off</mat-icon>
+      <h3>Không tìm thấy người dùng nào</h3>
+    </div>
+  }
+
+  @if (!loading() && users().length > 0) {
+    <div class="table-wrap">
+      <table class="users-table">
+        <thead>
+          <tr>
+            <th>Tên</th><th>Email</th><th>SĐT</th><th>Vai trò</th><th>Trạng thái</th><th>Đăng nhập cuối</th><th>Ngày tạo</th><th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (u of users(); track u.id) {
+            <tr>
+              <td class="name-cell">{{ u.fullName }}</td>
+              <td>{{ u.email }}</td>
+              <td>{{ u.phoneNumber || '—' }}</td>
+              <td>
+                <select class="role-select" [ngModel]="primaryRoleId(u)" (ngModelChange)="changeRole(u, $event)">
+                  @for (r of roleOptions; track r.id) {
+                    <option [ngValue]="r.id">{{ r.name }}</option>
+                  }
+                </select>
+              </td>
+              <td>
+                <mat-slide-toggle [checked]="u.isActive" (change)="toggleStatus(u, $event.checked)"></mat-slide-toggle>
+              </td>
+              <td>{{ u.lastLoginAt ? (u.lastLoginAt | date:'dd/MM/yyyy HH:mm') : '—' }}</td>
+              <td>{{ u.createdAt | date:'dd/MM/yyyy' }}</td>
+              <td>
+                <button mat-icon-button matTooltip="Đặt lại mật khẩu" (click)="openResetPassword(u)">
+                  <mat-icon>lock_reset</mat-icon>
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pagination">
+      <button mat-stroked-button [disabled]="page === 1" (click)="prevPage()">
+        <mat-icon>chevron_left</mat-icon> Trước
+      </button>
+      <span>Trang {{ page }} / {{ totalPages() }}</span>
+      <button mat-stroked-button [disabled]="page >= totalPages()" (click)="nextPage()">
+        Sau <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+  }
+</div>

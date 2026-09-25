@@ -1,0 +1,165 @@
+<div class="page">
+  <div class="page-header">
+    <button mat-icon-button routerLink="/health-records" class="back-btn">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <div class="header-info">
+      <h2 class="page-title">{{ record()?.profileName }}</h2>
+      <p class="page-subtitle">{{ record()?.fullName }}</p>
+    </div>
+    <button mat-stroked-button (click)="addMetric()">
+      <mat-icon>add</mat-icon> Thêm chỉ số
+    </button>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-center"><mat-spinner diameter="48" /></div>
+  }
+
+  @if (!loading() && record()) {
+    <div class="detail-grid">
+
+      <!-- Profile Info -->
+      <mat-card class="hp-card info-card">
+        <div class="card-avatar" [style.background]="getAvatarColor(record()!.gender)">
+          <mat-icon>{{ record()!.gender === 'Male' ? 'man' : record()!.gender === 'Female' ? 'woman' : 'person' }}</mat-icon>
+        </div>
+        <div class="info-rows">
+          <div class="info-row">
+            <span class="lbl">Ngày sinh</span>
+            <span class="val">{{ record()!.dateOfBirth | date:'dd/MM/yyyy' }} ({{ calcAge(record()!.dateOfBirth) }} tuổi)</span>
+          </div>
+          <div class="info-row">
+            <span class="lbl">Giới tính</span>
+            <span class="val">{{ genderLabel(record()!.gender) }}</span>
+          </div>
+          @if (record()!.bloodType) {
+            <div class="info-row">
+              <span class="lbl">Nhóm máu</span>
+              <span class="val blood">🩸 {{ bloodTypeLabel(record()!.bloodType!) }}</span>
+            </div>
+          }
+          @if (record()!.insuranceNumber) {
+            <div class="info-row">
+              <span class="lbl">Số BHYT</span>
+              <span class="val">{{ record()!.insuranceNumber }}</span>
+            </div>
+          }
+          @if (record()!.allergies) {
+            <div class="info-row">
+              <span class="lbl">Dị ứng</span>
+              <span class="val warn">{{ record()!.allergies }}</span>
+            </div>
+          }
+          @if (record()!.chronicDiseases) {
+            <div class="info-row">
+              <span class="lbl">Bệnh mãn tính</span>
+              <span class="val warn">{{ record()!.chronicDiseases }}</span>
+            </div>
+          }
+        </div>
+      </mat-card>
+
+      <!-- Latest metrics summary -->
+      @if (record()!.latestMetric) {
+        <mat-card class="hp-card metrics-summary">
+          <div class="card-title">Chỉ số gần nhất
+            <span class="date-chip">{{ record()!.latestMetric!.measuredAt | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+          <div class="metrics-grid">
+            @if (record()!.latestMetric!.bmi) {
+              <div class="metric-box" [class]="bmiBoxClass(record()!.latestMetric!.bmi!)">
+                <span class="m-val">{{ record()!.latestMetric!.bmi | number:'1.1-1' }}</span>
+                <span class="m-lbl">BMI</span>
+                <span class="m-status">{{ bmiStatus(record()!.latestMetric!.bmi!) }}</span>
+              </div>
+            }
+            @if (record()!.latestMetric!.weightKg) {
+              <div class="metric-box">
+                <span class="m-val">{{ record()!.latestMetric!.weightKg }}</span>
+                <span class="m-lbl">kg</span>
+              </div>
+            }
+            @if (record()!.latestMetric!.heightCm) {
+              <div class="metric-box">
+                <span class="m-val">{{ record()!.latestMetric!.heightCm }}</span>
+                <span class="m-lbl">cm</span>
+              </div>
+            }
+            @if (record()!.latestMetric!.heartRate) {
+              <div class="metric-box">
+                <span class="m-val">{{ record()!.latestMetric!.heartRate }}</span>
+                <span class="m-lbl">bpm</span>
+              </div>
+            }
+            @if (record()!.latestMetric!.systolicBp) {
+              <div class="metric-box">
+                <span class="m-val">{{ record()!.latestMetric!.systolicBp }}/{{ record()!.latestMetric!.diastolicBp }}</span>
+                <span class="m-lbl">mmHg</span>
+              </div>
+            }
+            @if (record()!.latestMetric!.temperature) {
+              <div class="metric-box">
+                <span class="m-val">{{ record()!.latestMetric!.temperature }}</span>
+                <span class="m-lbl">°C</span>
+              </div>
+            }
+          </div>
+        </mat-card>
+      }
+
+      <!-- Chart -->
+      @if (metrics().length > 1) {
+        <mat-card class="hp-card chart-card">
+          <div class="card-title">Lịch sử chỉ số</div>
+          <app-health-metrics-chart [metrics]="metrics()" />
+        </mat-card>
+      }
+
+      <!-- History list -->
+      <mat-card class="hp-card history-card">
+        <div class="card-title-row">
+          <span class="card-title">Lịch sử đo</span>
+          <button mat-stroked-button (click)="addMetric()">
+            <mat-icon>add</mat-icon> Thêm
+          </button>
+        </div>
+        @if (metricsLoading()) {
+          <div class="loading-center"><mat-spinner diameter="32" /></div>
+        }
+        @if (!metricsLoading() && metrics().length === 0) {
+          <div class="empty-small">
+            <mat-icon>show_chart</mat-icon>
+            <p>Chưa có lịch sử đo. Thêm chỉ số đầu tiên!</p>
+          </div>
+        }
+        @if (!metricsLoading() && metrics().length > 0) {
+          <div class="metrics-list">
+            @for (m of metrics(); track m.id) {
+              <div class="metric-row">
+                <div class="metric-date-col">
+                  <span class="m-date">{{ m.measuredAt | date:'dd/MM/yyyy' }}</span>
+                  <span class="m-time">{{ m.measuredAt | date:'HH:mm' }}</span>
+                </div>
+                <div class="metric-values">
+                  @if (m.bmi) {
+                    <span class="mv-chip bmi" [class]="bmiChipClass(m.bmi)">BMI {{ m.bmi | number:'1.1-1' }}</span>
+                  }
+                  @if (m.weightKg)    { <span class="mv-chip">{{ m.weightKg }}kg</span> }
+                  @if (m.heartRate)   { <span class="mv-chip">{{ m.heartRate }}bpm</span> }
+                  @if (m.systolicBp)  { <span class="mv-chip">{{ m.systolicBp }}/{{ m.diastolicBp }}mmHg</span> }
+                  @if (m.temperature) { <span class="mv-chip">{{ m.temperature }}°C</span> }
+                  @if (m.bloodSugar)  { <span class="mv-chip">{{ m.bloodSugar }}mmol/L</span> }
+                </div>
+                <button mat-icon-button class="del-btn" (click)="deleteMetric(m.id)">
+                  <mat-icon>delete_outline</mat-icon>
+                </button>
+              </div>
+            }
+          </div>
+        }
+      </mat-card>
+
+    </div>
+  }
+</div>

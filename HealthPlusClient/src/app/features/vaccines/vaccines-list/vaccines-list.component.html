@@ -1,0 +1,157 @@
+<div class="page">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h2 class="page-title">Lịch sử tiêm chủng</h2>
+      <p class="page-subtitle">Theo dõi vaccine và lịch tiêm nhắc lại</p>
+    </div>
+    <button mat-raised-button color="primary" (click)="openCreate()">
+      <mat-icon>vaccines</mat-icon> Thêm mũi tiêm
+    </button>
+  </div>
+
+  <!-- Overdue alert -->
+  @if (!overdueLoading() && overdueList().length > 0) {
+    <div class="overdue-banner">
+      <mat-icon>warning</mat-icon>
+      <div class="overdue-content">
+        <strong>Có {{ overdueList().length }} vaccine quá hạn cần tiêm!</strong>
+        <div class="overdue-names">
+          @for (v of overdueList(); track v.id) {
+            <span class="overdue-chip" (click)="openEdit(v)">
+              {{ v.vaccineName }} mũi {{ v.doseNumber }}
+              <span class="overdue-days">{{ -daysUntil(v.nextDueDate!) }} ngày trước</span>
+            </span>
+          }
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Filter bar -->
+  <div class="filter-bar">
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Lọc theo hồ sơ</mat-label>
+      <mat-select [(ngModel)]="selectedRecordId" (ngModelChange)="onFilterChange()">
+        <mat-option value="">Tất cả hồ sơ</mat-option>
+        @for (r of healthRecords(); track r.id) {
+          <mat-option [value]="r.id">{{ r.profileName }} — {{ r.fullName }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <div class="status-tabs">
+      @for (tab of statusTabs; track tab.value) {
+        <button class="status-tab"
+          [class.active]="selectedStatus === tab.value"
+          (click)="selectedStatus = tab.value">
+          {{ tab.label }}
+          @if (countByStatus(tab.value) > 0) {
+            <span class="tab-count" [class]="tab.value">{{ countByStatus(tab.value) }}</span>
+          }
+        </button>
+      }
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-center"><mat-spinner diameter="48" /></div>
+  }
+
+  @if (!loading() && filteredItems().length === 0) {
+    <div class="empty-state">
+      <mat-icon>vaccines</mat-icon>
+      <h3>Chưa có mũi tiêm nào</h3>
+      <p>Ghi lại lịch sử tiêm chủng để nhận thông báo nhắc nhở</p>
+      <button mat-raised-button color="primary" (click)="openCreate()">
+        <mat-icon>add</mat-icon> Thêm mũi đầu tiên
+      </button>
+    </div>
+  }
+
+  @if (!loading() && filteredItems().length > 0) {
+    <div class="vaccine-grid">
+      @for (v of filteredItems(); track v.id) {
+        <mat-card class="vaccine-card">
+          <!-- Status indicator -->
+          <div class="status-bar" [class]="v.status.toLowerCase()"></div>
+
+          <div class="card-body">
+            <!-- Top row -->
+            <div class="card-top">
+              <div class="vaccine-icon" [class]="v.status.toLowerCase()">
+                <mat-icon>vaccines</mat-icon>
+              </div>
+              <div class="vaccine-name-block">
+                <span class="vaccine-name">{{ v.vaccineName }}</span>
+                <span class="dose-label">Mũi {{ v.doseNumber }}</span>
+              </div>
+              <span class="status-chip" [class]="v.status.toLowerCase()">
+                {{ statusLabel(v.status) }}
+              </span>
+            </div>
+
+            <!-- Info rows -->
+            <div class="info-rows">
+              <div class="info-row">
+                <mat-icon>event</mat-icon>
+                <span>Ngày tiêm: <b>{{ v.injectionDate | date:'dd/MM/yyyy' }}</b></span>
+              </div>
+              @if (v.nextDueDate) {
+                <div class="info-row" [class.overdue-row]="isOverdue(v.nextDueDate)">
+                  <mat-icon>event_repeat</mat-icon>
+                  <span>Mũi kế: <b>{{ v.nextDueDate | date:'dd/MM/yyyy' }}</b></span>
+                  @if (isOverdue(v.nextDueDate)) {
+                    <span class="overdue-tag">Quá {{ -daysUntil(v.nextDueDate) }} ngày</span>
+                  } @else if (daysUntil(v.nextDueDate) <= 30) {
+                    <span class="soon-tag">Còn {{ daysUntil(v.nextDueDate) }} ngày</span>
+                  }
+                </div>
+              }
+              @if (v.location) {
+                <div class="info-row">
+                  <mat-icon>location_on</mat-icon>
+                  <span>{{ v.location }}</span>
+                </div>
+              }
+              @if (v.manufacturer) {
+                <div class="info-row">
+                  <mat-icon>business</mat-icon>
+                  <span>{{ v.manufacturer }}</span>
+                </div>
+              }
+              @if (v.sideEffects) {
+                <div class="info-row side-effects">
+                  <mat-icon>warning_amber</mat-icon>
+                  <span>{{ v.sideEffects }}</span>
+                </div>
+              }
+            </div>
+
+            <!-- Actions -->
+            <div class="card-actions">
+              <button mat-icon-button (click)="openEdit(v)" matTooltip="Chỉnh sửa">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button class="del-btn" (click)="delete(v)" matTooltip="Xoá">
+                <mat-icon>delete_outline</mat-icon>
+              </button>
+            </div>
+          </div>
+        </mat-card>
+      }
+    </div>
+
+    @if (totalCount() > pageSize) {
+      <div class="pagination-row">
+        <span>Hiển thị {{ allItems().length }} / {{ totalCount() }}</span>
+        @if (hasMore()) {
+          <button mat-button color="primary" (click)="loadMore()">
+            Xem thêm <mat-icon>expand_more</mat-icon>
+          </button>
+        }
+      </div>
+    }
+  }
+</div>

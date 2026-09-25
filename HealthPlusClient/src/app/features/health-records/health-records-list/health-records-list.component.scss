@@ -1,0 +1,59 @@
+.page { max-width: 1100px; margin: 0 auto; }
+.page-header {
+  display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 28px;
+}
+.page-title   { font-size: 22px; font-weight: 700; color: var(--hp-text-primary); margin: 0 0 4px; }
+.page-subtitle{ color: var(--hp-text-secondary); font-size: 14px; margin: 0; }
+.loading-center { display: flex; justify-content: center; padding: 80px 0; }
+.empty-state {
+  display: flex; flex-direction: column; align-items: center; padding: 80px 24px; text-align: center;
+  mat-icon { font-size: 64px; width: 64px; height: 64px; color: var(--hp-border); margin-bottom: 16px; }
+  h3 { font-size: 18px; font-weight: 600; color: var(--hp-text-primary); margin: 0 0 8px; }
+  p  { color: var(--hp-text-secondary); margin: 0 0 24px; }
+}
+.records-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;
+}
+.record-card {
+  border-radius: var(--hp-radius) !important; box-shadow: var(--hp-shadow) !important;
+  padding: 20px !important; cursor: pointer;
+  transition: box-shadow 0.2s, transform 0.2s;
+  &:hover { box-shadow: var(--hp-shadow-hover) !important; transform: translateY(-2px); }
+}
+.card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.avatar {
+  width: 46px; height: 46px; border-radius: 14px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  mat-icon { color: white; font-size: 24px; width: 24px; height: 24px; }
+}
+.card-name { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
+.profile-name { font-size: 15px; font-weight: 700; color: var(--hp-text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.full-name    { font-size: 12px; color: var(--hp-text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.edit-btn { color: var(--hp-text-secondary) !important; }
+.chips-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+.info-chip {
+  display: inline-flex; align-items: center; gap: 3px;
+  padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 500;
+  &.age    { background: #E3F2FD; color: #1565C0; }
+  &.blood  { background: #FCE4EC; color: #C62828; }
+  &.gender { background: #F3E5F5; color: #6A1B9A; }
+  &.gender.male   { background: #E3F2FD; color: #1565C0; }
+  &.gender.female { background: #FCE4EC; color: #AD1457; }
+}
+.metrics-row {
+  display: flex; align-items: center; gap: 16px;
+  padding: 12px 14px; background: var(--hp-bg); border-radius: 10px;
+}
+.metric-item { display: flex; flex-direction: column; align-items: center; }
+.metric-val  { font-size: 18px; font-weight: 700; color: var(--hp-text-primary); }
+.metric-val.bmi-normal      { color: #0D47A1; }
+.metric-val.bmi-overweight  { color: #AD1457; }
+.metric-val.bmi-obese       { color: #C62828; }
+.metric-val.bmi-underweight { color: #1565C0; }
+.metric-lbl  { font-size: 11px; color: var(--hp-text-secondary); }
+.metric-date { margin-left: auto; font-size: 11px; color: var(--hp-text-secondary); }
+.no-metrics {
+  display: flex; align-items: center; gap: 6px; padding: 10px 14px;
+  background: var(--hp-bg); border-radius: 10px; color: var(--hp-text-secondary); font-size: 13px;
+  mat-icon { font-size: 16px; width: 16px; height: 16px; }
+}

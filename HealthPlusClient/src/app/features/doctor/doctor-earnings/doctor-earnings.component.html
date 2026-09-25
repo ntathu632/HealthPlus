@@ -1,0 +1,56 @@
+<div class="page">
+  <div class="page-header">
+    <h2 class="page-title">Doanh thu</h2>
+    <p class="page-subtitle">Các khoản thu từ lịch tư vấn trả phí (mô phỏng — demo)</p>
+  </div>
+
+  @if (!loading()) {
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-icon"><mat-icon>payments</mat-icon></div>
+        <div>
+          <p class="stat-val">{{ totalEarned() | number }}đ</p>
+          <p class="stat-lbl">Tổng doanh thu</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><mat-icon>event_available</mat-icon></div>
+        <div>
+          <p class="stat-val">{{ totalConsultations() }}</p>
+          <p class="stat-lbl">Lượt tư vấn đã thu phí</p>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (loading()) {
+    <div class="loading-center"><mat-spinner diameter="48" /></div>
+  }
+
+  @if (!loading() && items().length === 0) {
+    <div class="empty-state">
+      <mat-icon>payments</mat-icon>
+      <h3>Chưa có giao dịch nào</h3>
+      <p>Các khoản thanh toán từ bệnh nhân cho lịch tư vấn trả phí sẽ hiển thị tại đây</p>
+    </div>
+  }
+
+  @if (!loading() && items().length > 0) {
+    <div class="list">
+      @for (p of items(); track p.id) {
+        <mat-card class="row-card">
+          <div class="row-icon"><mat-icon>person</mat-icon></div>
+          <div class="row-body">
+            <span class="doctor-name">{{ p.patientName }}</span>
+            <span class="time">Lịch hẹn: {{ p.appointmentTime | date:'HH:mm dd/MM/yyyy' }}</span>
+            <span class="time">Thanh toán: {{ p.paidAt ? (p.paidAt | date:'HH:mm dd/MM/yyyy') : '—' }} · {{ p.method }}</span>
+          </div>
+          <div class="row-end">
+            <span class="amount">{{ p.amount | number }}đ</span>
+            <span class="status-chip" [ngClass]="p.status.toLowerCase()">{{ statusLabel(p.status) }}</span>
+          </div>
+        </mat-card>
+      }
+    </div>
+  }
+</div>

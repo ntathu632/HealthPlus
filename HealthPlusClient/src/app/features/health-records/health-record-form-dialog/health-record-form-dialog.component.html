@@ -1,0 +1,78 @@
+<div class="dialog-header">
+  <mat-icon>{{ isEdit ? 'edit' : 'person_add' }}</mat-icon>
+  <h2 mat-dialog-title>{{ isEdit ? 'Sửa hồ sơ' : 'Thêm hồ sơ mới' }}</h2>
+  <button mat-icon-button mat-dialog-close class="close-btn"><mat-icon>close</mat-icon></button>
+</div>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="form-grid">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Tên hồ sơ</mat-label>
+      <input matInput formControlName="profileName" placeholder="VD: Bố, Mẹ, Bé Nam..." />
+      <mat-hint>Tên gọi tắt để phân biệt hồ sơ</mat-hint>
+      @if (form.get('profileName')?.hasError('required') && form.get('profileName')?.touched) {
+        <mat-error>Bắt buộc nhập</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Họ và tên đầy đủ</mat-label>
+      <input matInput formControlName="fullName" />
+      @if (form.get('fullName')?.hasError('required') && form.get('fullName')?.touched) {
+        <mat-error>Bắt buộc nhập</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Ngày sinh</mat-label>
+      <input matInput type="date" formControlName="dateOfBirth" />
+      @if (form.get('dateOfBirth')?.hasError('required') && form.get('dateOfBirth')?.touched) {
+        <mat-error>Bắt buộc nhập</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Giới tính</mat-label>
+      <mat-select formControlName="gender">
+        <mat-option value="Male">Nam</mat-option>
+        <mat-option value="Female">Nữ</mat-option>
+        <mat-option value="Other">Khác</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Nhóm máu</mat-label>
+      <mat-select formControlName="bloodType">
+        <mat-option value="">-- Không biết --</mat-option>
+        @for (bt of bloodTypes; track bt.value) {
+          <mat-option [value]="bt.value">{{ bt.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Số BHYT</mat-label>
+      <input matInput formControlName="insuranceNumber" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Dị ứng</mat-label>
+      <textarea matInput formControlName="allergies" rows="2"
+        placeholder="VD: Penicillin, phấn hoa..."></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Bệnh mãn tính</mat-label>
+      <textarea matInput formControlName="chronicDiseases" rows="2"
+        placeholder="VD: Tiểu đường, tăng huyết áp..."></textarea>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Huỷ</button>
+  <button mat-raised-button color="primary" (click)="submit()" [disabled]="loading() || form.invalid">
+    @if (loading()) { <mat-spinner diameter="18" /> }
+    @else { {{ isEdit ? 'Lưu thay đổi' : 'Tạo hồ sơ' }} }
+  </button>
+</mat-dialog-actions>

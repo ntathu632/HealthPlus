@@ -1,0 +1,4 @@
+.chart-wrapper { display: flex; flex-direction: column; gap: 16px; }
+.chart-controls { display: flex; justify-content: flex-end; }
+mat-button-toggle-group { border-radius: 10px !important; }
+.chart-container { height: 240px; position: relative; }

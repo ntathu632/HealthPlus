@@ -1,0 +1,56 @@
+<div class="page">
+  <div class="page-header">
+    <h2 class="page-title">Vai trò & quyền</h2>
+    <p class="page-subtitle">Chọn 1 vai trò để xem/sửa danh sách quyền tương ứng</p>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-center"><mat-spinner diameter="48" /></div>
+  }
+
+  @if (!loading()) {
+    <div class="layout">
+      <div class="roles-col">
+        @for (r of roles(); track r.id) {
+          <button class="role-item" [class.active]="selectedRole()?.id === r.id" (click)="selectRole(r)">
+            <span class="role-name">{{ r.name }}</span>
+            @if (r.description) { <span class="role-desc">{{ r.description }}</span> }
+          </button>
+        }
+      </div>
+
+      <mat-card class="perms-col">
+        @if (!selectedRole()) {
+          <div class="empty-inline"><mat-icon>admin_panel_settings</mat-icon><p>Chọn 1 vai trò bên trái</p></div>
+        } @else {
+          <div class="perms-header">
+            <h3>Quyền của "{{ selectedRole()!.name }}"</h3>
+            <button mat-raised-button color="primary" [disabled]="saving()" (click)="save()">
+              @if (saving()) {
+                <mat-spinner diameter="18" />
+              } @else {
+                <ng-container><mat-icon>save</mat-icon> Lưu thay đổi</ng-container>
+              }
+            </button>
+          </div>
+
+          @for (group of groups(); track group.resource) {
+            <div class="group">
+              <span class="group-title">{{ group.resource }}</span>
+              <div class="checks">
+                @for (p of group.permissions; track p.id) {
+                  <mat-checkbox
+                    [checked]="selectedIds().has(p.id)"
+                    (change)="toggle(p.id, $event.checked)">
+                    {{ p.action }}
+                    @if (p.description) { <span class="perm-desc"> — {{ p.description }}</span> }
+                  </mat-checkbox>
+                }
+              </div>
+            </div>
+          }
+        }
+      </mat-card>
+    </div>
+  }
+</div>

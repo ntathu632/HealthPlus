@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <!-- Tesseract OCR chỉ có native binary x86/x64, máy dev là Windows ARM64 nên phải ép
+       chạy qua lớp giả lập x64 của Windows khi build/run trên máy dev, nếu không TesseractEngine
+       sẽ throw DllNotFoundException. Chỉ áp dụng khi build TRÊN Windows ($(OS) do MSBuild set theo
+       máy đang chạy build, không phải máy đích) — Docker build chạy trong Linux container nên
+       $(OS)=Unix, RID này sẽ không áp dụng và publish ra framework-dependent bình thường.
+       $(SkipWinX64Rid) là cửa thoát tạm thời cho `dotnet ef` — công cụ này không tự tìm đúng
+       thư mục output khi có RuntimeIdentifier (build ra bin/.../win-x64/ nhưng ef tooling lại tìm
+       ở bin/.../ không có win-x64/), set biến môi trường SkipWinX64Rid=true trước khi chạy migration. -->
+  <PropertyGroup Condition="'$(OS)' == 'Windows_NT' AND '$(SkipWinX64Rid)' != 'true'">
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>false</SelfContained>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.11">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HealthPlus.Application\HealthPlus.Application.csproj" />
+    <ProjectReference Include="..\HealthPlus.Persistence\HealthPlus.Persistence.csproj" />
+    <ProjectReference Include="..\HealthPlus.Infrastructure\HealthPlus.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="tessdata\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

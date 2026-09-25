@@ -1,0 +1,70 @@
+<div class="page">
+  <div class="page-header">
+    <h2 class="page-title">Lịch hẹn khám</h2>
+    <p class="page-subtitle">Lịch hẹn của bệnh nhân đặt với bạn</p>
+  </div>
+
+  <div class="status-tabs">
+    @for (tab of statusTabs; track tab.value) {
+      <button class="status-tab" [class.active]="selectedStatus() === tab.value" (click)="selectedStatus.set(tab.value)">
+        {{ tab.label }}
+        @if (countByStatus(tab.value) > 0) {
+          <span class="tab-count" [ngClass]="tab.value.toLowerCase()">{{ countByStatus(tab.value) }}</span>
+        }
+      </button>
+    }
+  </div>
+
+  @if (loading()) {
+    <div class="loading-center"><mat-spinner diameter="48" /></div>
+  }
+
+  @if (!loading() && filteredItems().length === 0) {
+    <div class="empty-state">
+      <mat-icon>event</mat-icon>
+      <h3>Không có lịch hẹn nào</h3>
+    </div>
+  }
+
+  @if (!loading() && filteredItems().length > 0) {
+    <div class="list">
+      @for (a of filteredItems(); track a.id) {
+        <mat-card class="row-card">
+          <div class="status-bar" [ngClass]="a.status.toLowerCase()"></div>
+          <div class="row-body">
+            <div class="row-top">
+              <span class="patient-name"><mat-icon>person</mat-icon>{{ a.patientName }}</span>
+              <span class="status-chip" [ngClass]="a.status.toLowerCase()">{{ statusLabel(a.status) }}</span>
+            </div>
+            <span class="time">{{ a.appointmentTime | date:'HH:mm dd/MM/yyyy' }}</span>
+            @if (a.reason) { <p class="reason"><b>Lý do:</b> {{ a.reason }}</p> }
+            @if (a.notes) { <p class="notes"><b>Ghi chú:</b> {{ a.notes }}</p> }
+          </div>
+          <div class="row-actions">
+            @if (a.status === 'Pending') {
+              <button mat-stroked-button color="primary" (click)="updateStatus(a, 'Confirmed')">
+                <mat-icon>check</mat-icon> Xác nhận
+              </button>
+              <button mat-stroked-button class="reject-btn" (click)="updateStatus(a, 'Cancelled')">
+                <mat-icon>close</mat-icon> Từ chối
+              </button>
+            }
+            @if (a.status === 'Confirmed') {
+              @if (a.isPaid) {
+                <a mat-raised-button color="primary" [href]="a.videoRoomUrl" target="_blank" rel="noopener">
+                  <mat-icon>videocam</mat-icon> Vào phòng tư vấn
+                </a>
+              }
+              <button mat-stroked-button color="primary" (click)="updateStatus(a, 'Completed')">
+                <mat-icon>done_all</mat-icon> Hoàn thành
+              </button>
+              <button mat-stroked-button class="reject-btn" (click)="updateStatus(a, 'Cancelled')">
+                <mat-icon>close</mat-icon> Huỷ
+              </button>
+            }
+          </div>
+        </mat-card>
+      }
+    </div>
+  }
+</div>

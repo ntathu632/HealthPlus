@@ -1,0 +1,146 @@
+<div class="page">
+  <a routerLink="/doctor/patients" class="back-link">
+    <mat-icon>arrow_back</mat-icon> Danh sách bệnh nhân
+  </a>
+
+  @if (loading()) {
+    <div class="loading-center"><mat-spinner diameter="48" /></div>
+  }
+
+  @if (!loading() && profile(); as p) {
+    <div class="patient-header">
+      <div class="avatar">
+        @if (p.patient.avatarUrl) {
+          <img [src]="p.patient.avatarUrl" alt="" />
+        } @else {
+          {{ initials(p.patient.fullName) }}
+        }
+      </div>
+      <div class="header-info">
+        <h2>{{ p.patient.fullName }}</h2>
+        <span>{{ p.patient.email }}</span>
+        @if (p.patient.phoneNumber) { <span> · {{ p.patient.phoneNumber }}</span> }
+      </div>
+    </div>
+
+    <mat-tab-group class="tabs" animationDuration="150ms">
+
+      <!-- Hồ sơ sức khỏe -->
+      <mat-tab label="Hồ sơ sức khỏe">
+        <div class="tab-body">
+          @if (p.healthRecords.length === 0) {
+            <div class="empty-inline"><mat-icon>folder_open</mat-icon><p>Bệnh nhân chưa có hồ sơ sức khỏe nào</p></div>
+          }
+          <div class="cards-grid">
+            @for (r of p.healthRecords; track r.id) {
+              <mat-card class="info-card">
+                <span class="card-title">{{ r.profileName }} — {{ r.fullName }}</span>
+                <div class="chips-row">
+                  <span class="chip">{{ r.gender === 'Male' ? 'Nam' : r.gender === 'Female' ? 'Nữ' : 'Khác' }}</span>
+                  @if (r.bloodType) { <span class="chip">🩸 {{ bloodTypeLabel(r.bloodType) }}</span> }
+                </div>
+                @if (r.allergies) { <p class="card-line"><b>Dị ứng:</b> {{ r.allergies }}</p> }
+                @if (r.chronicDiseases) { <p class="card-line"><b>Bệnh mạn tính:</b> {{ r.chronicDiseases }}</p> }
+                @if (r.latestMetric?.bmi) { <p class="card-line"><b>BMI gần nhất:</b> {{ r.latestMetric?.bmi }}</p> }
+              </mat-card>
+            }
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- Lịch sử khám -->
+      <mat-tab label="Lịch sử khám">
+        <div class="tab-body">
+          <div class="tab-actions">
+            <button mat-raised-button color="primary"
+              [disabled]="p.healthRecords.length === 0"
+              (click)="openAddMedicalHistory(p)">
+              <mat-icon>add</mat-icon> Thêm chẩn đoán
+            </button>
+            @if (p.healthRecords.length === 0) {
+              <span class="hint">Bệnh nhân cần có ít nhất 1 hồ sơ sức khỏe trước khi thêm chẩn đoán</span>
+            }
+          </div>
+          @if (p.medicalHistories.length === 0) {
+            <div class="empty-inline"><mat-icon>local_hospital</mat-icon><p>Chưa có lần khám nào</p></div>
+          }
+          @for (m of p.medicalHistories; track m.id) {
+            <mat-card class="info-card">
+              <div class="card-row">
+                <span class="card-title">{{ m.visitDate | date:'dd/MM/yyyy' }} @if (m.hospital) { — {{ m.hospital }} }</span>
+                <div class="card-actions">
+                  <button mat-icon-button matTooltip="Sửa" (click)="openAddMedicalHistory(p, m)"><mat-icon>edit</mat-icon></button>
+                  <button mat-icon-button matTooltip="Xoá" class="del-btn" (click)="deleteMedicalHistory(m)"><mat-icon>delete_outline</mat-icon></button>
+                </div>
+              </div>
+              @if (m.specialty) { <p class="card-line"><b>Chuyên khoa:</b> {{ m.specialty }}</p> }
+              @if (m.diagnosis) { <p class="card-line"><b>Chẩn đoán:</b> {{ m.diagnosis }}</p> }
+              @if (m.treatment) { <p class="card-line"><b>Điều trị:</b> {{ m.treatment }}</p> }
+              @if (m.followUpDate) { <p class="card-line"><b>Tái khám:</b> {{ m.followUpDate | date:'dd/MM/yyyy' }}</p> }
+            </mat-card>
+          }
+        </div>
+      </mat-tab>
+
+      <!-- Tiêm chủng -->
+      <mat-tab label="Tiêm chủng">
+        <div class="tab-body">
+          <div class="tab-actions">
+            <button mat-raised-button color="primary"
+              [disabled]="p.healthRecords.length === 0"
+              (click)="openAddVaccine(p)">
+              <mat-icon>add</mat-icon> Thêm mũi tiêm
+            </button>
+            @if (p.healthRecords.length === 0) {
+              <span class="hint">Bệnh nhân cần có ít nhất 1 hồ sơ sức khỏe trước khi thêm mũi tiêm</span>
+            }
+          </div>
+          @if (p.vaccines.length === 0) {
+            <div class="empty-inline"><mat-icon>vaccines</mat-icon><p>Chưa có mũi tiêm nào</p></div>
+          }
+          @for (v of p.vaccines; track v.id) {
+            <mat-card class="info-card">
+              <div class="card-row">
+                <span class="card-title">{{ v.vaccineName }} — mũi {{ v.doseNumber }}</span>
+                <div class="card-actions">
+                  <button mat-icon-button matTooltip="Sửa" (click)="openAddVaccine(p, v)"><mat-icon>edit</mat-icon></button>
+                  <button mat-icon-button matTooltip="Xoá" class="del-btn" (click)="deleteVaccine(v)"><mat-icon>delete_outline</mat-icon></button>
+                </div>
+              </div>
+              <p class="card-line"><b>Ngày tiêm:</b> {{ v.injectionDate | date:'dd/MM/yyyy' }}</p>
+              @if (v.nextDueDate) { <p class="card-line"><b>Mũi kế tiếp:</b> {{ v.nextDueDate | date:'dd/MM/yyyy' }}</p> }
+            </mat-card>
+          }
+        </div>
+      </mat-tab>
+
+      <!-- Đơn thuốc -->
+      <mat-tab label="Đơn thuốc">
+        <div class="tab-body">
+          <div class="tab-actions">
+            <button mat-raised-button color="primary" (click)="createPrescription(p)">
+              <mat-icon>add</mat-icon> Tạo đơn thuốc mới
+            </button>
+          </div>
+          @if (p.prescriptions.length === 0) {
+            <div class="empty-inline"><mat-icon>receipt_long</mat-icon><p>Chưa có đơn thuốc nào</p></div>
+          }
+          <div class="cards-grid">
+            @for (rx of p.prescriptions; track rx.id) {
+              <mat-card class="info-card rx-card" (click)="openPrescription(rx)">
+                <div class="card-row">
+                  <span class="card-title">{{ rx.createdAt | date:'dd/MM/yyyy' }} — {{ rx.items.length }} thuốc</span>
+                  <button mat-icon-button matTooltip="Xoá đơn thuốc" class="del-btn" (click)="deletePrescription(rx); $event.stopPropagation()">
+                    <mat-icon>delete_outline</mat-icon>
+                  </button>
+                </div>
+                <span class="chip">{{ statusLabel(rx.status) }}</span>
+              </mat-card>
+            }
+          </div>
+        </div>
+      </mat-tab>
+
+    </mat-tab-group>
+  }
+</div>

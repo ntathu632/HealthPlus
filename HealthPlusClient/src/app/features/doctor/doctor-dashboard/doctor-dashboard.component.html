@@ -1,0 +1,123 @@
+<div class="page">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div>
+      <p class="hero-date">{{ today | date:'EEEE, dd MMMM yyyy':'':'vi' }}</p>
+      <h1 class="hero-title">Xin chào, <span>{{ firstName() }}</span></h1>
+      <p class="hero-sub">Tổng quan lịch làm việc và bệnh nhân của bạn</p>
+    </div>
+    <a class="hero-btn" routerLink="/doctor/patients">
+      <mat-icon>groups</mat-icon> Xem bệnh nhân
+    </a>
+  </div>
+
+  <!-- Stats -->
+  <div class="stat-grid">
+    @for (s of stats(); track s.label) {
+      <a class="stat-card" [routerLink]="s.route">
+        <div class="stat-icon" [style.background]="s.lightBg">
+          <mat-icon [style.color]="s.fg">{{ s.icon }}</mat-icon>
+        </div>
+        <div>
+          <p class="stat-val" [style.color]="s.fg">{{ s.value }}</p>
+          <p class="stat-lbl">{{ s.label }}</p>
+        </div>
+      </a>
+    }
+  </div>
+
+  <!-- Grid -->
+  <div class="grid">
+
+    <!-- Lịch hẹn sắp tới -->
+    <div class="card">
+      <div class="card-head">
+        <div class="head-left">
+          <span class="head-dot green"></span>
+          <h3>Lịch hẹn sắp tới</h3>
+        </div>
+        <a class="see-all" routerLink="/doctor/appointments">Xem tất cả →</a>
+      </div>
+      @if (appointmentsLoading()) {
+        <div class="card-loading"><mat-spinner diameter="28" /></div>
+      } @else if (upcomingAppointments().length === 0) {
+        <div class="empty">
+          <mat-icon>event_available</mat-icon>
+          <p>Không có lịch hẹn sắp tới</p>
+        </div>
+      } @else {
+        @for (a of upcomingAppointments().slice(0,4); track a.id) {
+          <div class="row">
+            <div class="row-ic green-light"><mat-icon>person</mat-icon></div>
+            <div class="row-info">
+              <span class="row-name">{{ a.patientName }}</span>
+              <span class="row-sub">{{ a.appointmentTime | date:'HH:mm dd/MM' }} @if (a.reason) { — {{ a.reason }} }</span>
+            </div>
+            <span class="tag green">{{ statusLabel(a.status) }}</span>
+          </div>
+        }
+      }
+    </div>
+
+    <!-- Chờ xác nhận -->
+    <div class="card">
+      <div class="card-head">
+        <div class="head-left">
+          <span class="head-dot orange"></span>
+          <h3>Chờ xác nhận</h3>
+        </div>
+        <a class="see-all" routerLink="/doctor/appointments">Xem tất cả →</a>
+      </div>
+      @if (appointmentsLoading()) {
+        <div class="card-loading"><mat-spinner diameter="28" /></div>
+      } @else if (pendingAppointments().length === 0) {
+        <div class="empty good">
+          <mat-icon>check_circle</mat-icon>
+          <p>Không có lịch nào cần xác nhận</p>
+        </div>
+      } @else {
+        @for (a of pendingAppointments().slice(0,4); track a.id) {
+          <div class="row">
+            <div class="row-ic orange-light"><mat-icon>pending_actions</mat-icon></div>
+            <div class="row-info">
+              <span class="row-name">{{ a.patientName }}</span>
+              <span class="row-sub">{{ a.appointmentTime | date:'HH:mm dd/MM/yyyy' }}</span>
+            </div>
+            <span class="tag orange">Chờ xác nhận</span>
+          </div>
+        }
+      }
+    </div>
+
+    <!-- Bệnh nhân gần đây -->
+    <div class="card">
+      <div class="card-head">
+        <div class="head-left">
+          <span class="head-dot blue"></span>
+          <h3>Bệnh nhân gần đây</h3>
+        </div>
+        <a class="see-all" routerLink="/doctor/patients">Xem tất cả →</a>
+      </div>
+      @if (patientsLoading()) {
+        <div class="card-loading"><mat-spinner diameter="28" /></div>
+      } @else if (recentPatients().length === 0) {
+        <div class="empty">
+          <mat-icon>groups</mat-icon>
+          <p>Chưa có bệnh nhân nào được gán</p>
+        </div>
+      } @else {
+        @for (p of recentPatients().slice(0,4); track p.id) {
+          <a class="row" [routerLink]="['/doctor/patients', p.id]">
+            <div class="row-av blue">{{ p.fullName[0] }}</div>
+            <div class="row-info">
+              <span class="row-name">{{ p.fullName }}</span>
+              <span class="row-sub">{{ p.email }}</span>
+            </div>
+          </a>
+        }
+      }
+    </div>
+
+  </div>
+</div>

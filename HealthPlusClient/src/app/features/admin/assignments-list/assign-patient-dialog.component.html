@@ -1,0 +1,45 @@
+<div class="dialog-header">
+  <mat-icon>assignment_ind</mat-icon>
+  <h2 mat-dialog-title>Gán bệnh nhân cho bác sĩ</h2>
+  <button mat-icon-button mat-dialog-close class="close-btn"><mat-icon>close</mat-icon></button>
+</div>
+
+<mat-dialog-content>
+  @if (loadingLists()) {
+    <div class="loading-center"><mat-spinner diameter="36" /></div>
+  } @else {
+    <div class="form-grid">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Lọc theo tên</mat-label>
+        <input matInput [(ngModel)]="filterText" placeholder="Nhập tên để lọc..." />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Bác sĩ</mat-label>
+        <mat-select [(ngModel)]="selectedDoctorId">
+          @for (d of filteredDoctors(); track d.id) {
+            <mat-option [value]="d.id">{{ d.fullName }} — {{ d.email }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Bệnh nhân</mat-label>
+        <mat-select [(ngModel)]="selectedPatientId">
+          @for (p of filteredPatients(); track p.id) {
+            <mat-option [value]="p.id">{{ p.fullName }} — {{ p.email }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Huỷ</button>
+  <button mat-raised-button color="primary" (click)="submit()"
+    [disabled]="submitting() || !selectedDoctorId || !selectedPatientId">
+    @if (submitting()) { <mat-spinner diameter="18" /> }
+    @else { Gán bệnh nhân }
+  </button>
+</mat-dialog-actions>

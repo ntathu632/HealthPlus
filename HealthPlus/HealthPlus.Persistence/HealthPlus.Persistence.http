@@ -1,0 +1,6 @@
+@HealthPlus.Persistence_HostAddress = http://localhost:5044
+
+GET {{HealthPlus.Persistence_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

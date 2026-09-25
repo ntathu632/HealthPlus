@@ -1,0 +1,51 @@
+.page { max-width: 640px; margin: 0 auto; }
+.page-header { margin-bottom: 20px; }
+.page-title { margin: 0; font-size: 22px; font-weight: 800; color: var(--hp-text-primary); }
+.page-subtitle { margin: 4px 0 0; font-size: 13px; color: var(--hp-text-secondary); }
+.loading-center { display: flex; justify-content: center; padding: 60px; }
+
+.profile-card { padding: 24px; margin-bottom: 20px; border-radius: 14px; }
+
+.avatar-section { display: flex; align-items: center; gap: 16px; }
+.avatar-wrap {
+  position: relative; width: 76px; height: 76px; border-radius: 50%;
+  cursor: pointer; flex-shrink: 0;
+}
+.avatar-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
+.avatar-fallback {
+  width: 100%; height: 100%; border-radius: 50%;
+  background: linear-gradient(135deg, #1565C0, #1976D2);
+  color: white; font-size: 24px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+.avatar-overlay {
+  position: absolute; inset: 0; border-radius: 50%;
+  background: rgba(0,0,0,0.45); color: white;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity 0.2s;
+  mat-icon { font-size: 20px; width: 20px; height: 20px; }
+}
+.avatar-wrap:hover .avatar-overlay { opacity: 1; }
+.hidden-input { display: none; }
+.avatar-info h3 { margin: 0 0 2px; font-size: 16px; font-weight: 700; color: var(--hp-text-primary); }
+.avatar-info p { margin: 0; font-size: 13px; color: var(--hp-text-secondary); }
+
+.my-divider { margin: 20px 0 !important; }
+
+.section-label {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.8px; color: var(--hp-text-secondary); margin: 0 0 14px;
+  grid-column: span 2;
+}
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+.full-width { grid-column: span 2; }
+.actions-row { display: flex; justify-content: flex-end; margin-top: 4px; }
+
+.meta-card { padding: 20px 24px; }
+.meta-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 0; font-size: 13px; color: var(--hp-text-secondary);
+  border-bottom: 1px solid var(--hp-border);
+  &:last-child { border-bottom: none; }
+}
+.meta-value { color: var(--hp-text-primary); font-weight: 600; }

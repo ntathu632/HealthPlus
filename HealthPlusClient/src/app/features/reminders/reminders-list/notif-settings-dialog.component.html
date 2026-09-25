@@ -1,0 +1,95 @@
+<div class="dialog-header">
+  <mat-icon>tune</mat-icon>
+  <h2 mat-dialog-title>Cài đặt thông báo</h2>
+  <button mat-icon-button mat-dialog-close><mat-icon>close</mat-icon></button>
+</div>
+
+<mat-dialog-content>
+  @if (loadingSettings()) {
+    <div class="loading-center"><mat-spinner diameter="36" /></div>
+  } @else {
+    <form [formGroup]="form">
+
+      <p class="section-label">Kênh thông báo</p>
+      <div class="toggle-row">
+        <mat-icon class="toggle-icon push">notifications</mat-icon>
+        <div class="toggle-info">
+          <span>Push notification</span>
+          <small>Thông báo đẩy trên thiết bị</small>
+        </div>
+        <mat-slide-toggle formControlName="pushEnabled" color="primary" />
+      </div>
+      @if (form.value.pushEnabled && !pushService.isSupported) {
+        <p class="hint-text push-hint">Trình duyệt này không hỗ trợ push notification.</p>
+      } @else if (form.value.pushEnabled && !pushService.isConfigured) {
+        <p class="hint-text push-hint">Firebase chưa được cấu hình phía server.</p>
+      }
+      <div class="toggle-row">
+        <mat-icon class="toggle-icon email">email</mat-icon>
+        <div class="toggle-info">
+          <span>Email</span>
+          <small>Gửi qua địa chỉ email</small>
+        </div>
+        <mat-slide-toggle formControlName="emailEnabled" color="primary" />
+      </div>
+      <div class="toggle-row">
+        <mat-icon class="toggle-icon sms">sms</mat-icon>
+        <div class="toggle-info">
+          <span>SMS</span>
+          <small>Tin nhắn điện thoại</small>
+        </div>
+        <mat-slide-toggle formControlName="smsEnabled" color="primary" />
+      </div>
+
+      <mat-divider class="my-divider" />
+
+      <p class="section-label">Loại nhắc nhở</p>
+      <div class="toggle-row">
+        <mat-icon class="toggle-icon vaccine">vaccines</mat-icon>
+        <div class="toggle-info">
+          <span>Nhắc tiêm vaccine</span>
+        </div>
+        <mat-slide-toggle formControlName="vaccineReminderEnabled" color="primary" />
+      </div>
+      <div class="toggle-row">
+        <mat-icon class="toggle-icon medicine">medication</mat-icon>
+        <div class="toggle-info">
+          <span>Nhắc uống thuốc</span>
+        </div>
+        <mat-slide-toggle formControlName="medicineReminderEnabled" color="primary" />
+      </div>
+      <div class="toggle-row">
+        <mat-icon class="toggle-icon followup">event_note</mat-icon>
+        <div class="toggle-info">
+          <span>Nhắc tái khám</span>
+        </div>
+        <mat-slide-toggle formControlName="followUpReminderEnabled" color="primary" />
+      </div>
+
+      <mat-divider class="my-divider" />
+
+      <p class="section-label">Giờ không làm phiền</p>
+      <div class="time-row">
+        <mat-form-field appearance="outline" class="time-field">
+          <mat-label>Bắt đầu</mat-label>
+          <input matInput type="time" formControlName="quietHourStart" />
+        </mat-form-field>
+        <span class="time-sep">–</span>
+        <mat-form-field appearance="outline" class="time-field">
+          <mat-label>Kết thúc</mat-label>
+          <input matInput type="time" formControlName="quietHourEnd" />
+        </mat-form-field>
+      </div>
+      <p class="hint-text">Trong khung giờ này sẽ không gửi thông báo</p>
+
+    </form>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Huỷ</button>
+  <button mat-raised-button color="primary" (click)="save()"
+    [disabled]="saving() || loadingSettings()">
+    @if (saving()) { <mat-spinner diameter="18" /> } @else { Lưu cài đặt }
+  </button>
+</mat-dialog-actions>

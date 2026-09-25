@@ -1,0 +1,26 @@
+<div class="chart-wrapper">
+  <div class="chart-controls">
+    <mat-button-toggle-group [(ngModel)]="selectedMode" (ngModelChange)="updateChart()">
+      @if (hasBmi()) {
+        <mat-button-toggle value="bmi">BMI</mat-button-toggle>
+      }
+      @if (hasWeight()) {
+        <mat-button-toggle value="weight">Cân nặng</mat-button-toggle>
+      }
+      @if (hasHeartRate()) {
+        <mat-button-toggle value="heartRate">Nhịp tim</mat-button-toggle>
+      }
+      @if (hasBloodPressure()) {
+        <mat-button-toggle value="bloodPressure">Huyết áp</mat-button-toggle>
+      }
+    </mat-button-toggle-group>
+  </div>
+
+  <div class="chart-container">
+    <canvas baseChart
+      [data]="chartData"
+      [options]="chartOptions"
+      type="line">
+    </canvas>
+  </div>
+</div>

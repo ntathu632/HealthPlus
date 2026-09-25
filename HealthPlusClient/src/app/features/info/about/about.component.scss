@@ -1,0 +1,26 @@
+.role-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin: 0 0 8px; }
+.role-card {
+  background: white; border: 1px solid var(--hp-border); border-radius: var(--hp-radius-lg);
+  box-shadow: var(--hp-shadow-sm); padding: 20px; transition: box-shadow 0.25s, transform 0.25s;
+  &:hover { box-shadow: var(--hp-shadow-md); transform: translateY(-3px); }
+}
+.role-icon {
+  width: 42px; height: 42px; border-radius: 12px; margin-bottom: 12px;
+  display: flex; align-items: center; justify-content: center;
+  mat-icon { font-size: 21px; width: 21px; height: 21px; }
+}
+.role-card h3 { font-size: 15px; font-weight: 700; color: var(--hp-text-primary); margin: 0 0 6px; }
+.role-card p { font-size: 13px; color: var(--hp-text-secondary); line-height: 1.5; margin: 0; }
+
+.steps-row { display: flex; align-items: flex-start; justify-content: center; flex-wrap: wrap; margin: 0 0 8px; }
+.step-item { flex: 1; min-width: 150px; max-width: 220px; text-align: center; padding: 0 10px; }
+.step-number {
+  width: 36px; height: 36px; border-radius: 50%; background: var(--hp-primary); color: white;
+  font-size: 15px; font-weight: 800; display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 10px;
+}
+.step-item h3 { font-size: 14px; font-weight: 700; color: var(--hp-text-primary); margin: 0 0 4px; }
+.step-item p { font-size: 12.5px; color: var(--hp-text-secondary); line-height: 1.5; margin: 0; }
+.step-connector { flex-shrink: 0; width: 40px; height: 2px; background: var(--hp-border); margin-top: 18px; }
+
+@media (max-width: 560px) { .step-connector { display: none; } }

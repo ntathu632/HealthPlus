@@ -1,0 +1,56 @@
+<div class="page">
+  <div class="page-header">
+    <h2 class="page-title">Lịch hẹn khám</h2>
+    <p class="page-subtitle">Toàn bộ lịch hẹn đang diễn ra trong hệ thống</p>
+  </div>
+
+  <div class="status-tabs">
+    @for (tab of statusTabs; track tab.value) {
+      <button class="status-tab" [class.active]="selectedStatus === tab.value" (click)="selectStatus(tab.value)">
+        {{ tab.label }}
+      </button>
+    }
+  </div>
+
+  @if (loading()) {
+    <div class="loading-center"><mat-spinner diameter="48" /></div>
+  }
+
+  @if (!loading() && appointments().length === 0) {
+    <div class="empty-state">
+      <mat-icon>event_busy</mat-icon>
+      <h3>Không có lịch hẹn nào</h3>
+    </div>
+  }
+
+  @if (!loading() && appointments().length > 0) {
+    <div class="table-wrap">
+      <table class="appt-table">
+        <thead>
+          <tr><th>Ngày giờ</th><th>Bác sĩ</th><th>Bệnh nhân</th><th>Lý do</th><th>Trạng thái</th></tr>
+        </thead>
+        <tbody>
+          @for (a of appointments(); track a.id) {
+            <tr>
+              <td>{{ a.appointmentTime | date:'HH:mm dd/MM/yyyy' }}</td>
+              <td>{{ a.doctorName }}</td>
+              <td>{{ a.patientName }}</td>
+              <td>{{ a.reason || '—' }}</td>
+              <td><span class="status-chip" [ngClass]="a.status.toLowerCase()">{{ statusLabel(a.status) }}</span></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pagination">
+      <button mat-stroked-button [disabled]="page === 1" (click)="prevPage()">
+        <mat-icon>chevron_left</mat-icon> Trước
+      </button>
+      <span>Trang {{ page }} / {{ totalPages() }}</span>
+      <button mat-stroked-button [disabled]="page >= totalPages()" (click)="nextPage()">
+        Sau <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+  }
+</div>

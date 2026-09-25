@@ -1,0 +1,64 @@
+.dialog-header {
+  display: flex; align-items: flex-start; gap: 14px; padding: 20px 24px 0;
+}
+.header-date {
+  display: flex; flex-direction: column; align-items: center;
+  background: var(--hp-primary); color: white;
+  border-radius: 10px; padding: 10px 14px; flex-shrink: 0;
+}
+.h-day   { font-size: 26px; font-weight: 700; line-height: 1; }
+.h-month { font-size: 11px; opacity: 0.85; }
+.header-info {
+  flex: 1;
+  h2 { margin: 0 0 4px; font-size: 17px; font-weight: 700; color: var(--hp-text-primary); }
+  p  { margin: 0; font-size: 13px; color: var(--hp-text-secondary); }
+}
+
+mat-dialog-content { padding: 16px 24px !important; }
+
+.chips-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500;
+  mat-icon { font-size: 14px; width: 14px; height: 14px; }
+  &.specialty { background: #E3F2FD; color: #1565C0; }
+  &.followup  { background: #F3E5F5; color: #6A1B9A; }
+  &.followup.urgent { background: #FFEBEE; color: #C62828; }
+}
+
+mat-divider { margin: 16px 0 !important; }
+
+.detail-section { margin-bottom: 16px; }
+.section-label {
+  display: flex; align-items: center; gap: 6px; margin-bottom: 8px;
+  font-size: 13px; font-weight: 600; color: var(--hp-text-secondary); text-transform: uppercase;
+  mat-icon { font-size: 15px; width: 15px; height: 15px; }
+  button { margin-left: auto; }
+}
+.section-text {
+  margin: 0; font-size: 14px; color: var(--hp-text-primary); line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.upload-bar { margin: 8px 0; }
+.upload-hint { font-size: 12px; color: var(--hp-text-secondary); margin: 4px 0; }
+.no-docs {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 13px; color: var(--hp-text-secondary); margin: 4px 0;
+  mat-icon { font-size: 16px; width: 16px; height: 16px; opacity: 0.5; }
+}
+.doc-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 0; border-bottom: 1px solid var(--hp-border);
+  &:last-child { border-bottom: none; }
+}
+.doc-icon { color: var(--hp-primary); }
+.doc-info { flex: 1; overflow: hidden; }
+.doc-name { font-size: 13px; font-weight: 500; color: var(--hp-text-primary); display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.doc-meta { font-size: 11px; color: var(--hp-text-secondary); }
+
+.meta-row {
+  display: flex; gap: 16px; flex-wrap: wrap;
+  font-size: 11px; color: var(--hp-text-secondary); margin-top: 8px;
+}
+mat-dialog-actions { padding: 8px 24px 20px !important; }

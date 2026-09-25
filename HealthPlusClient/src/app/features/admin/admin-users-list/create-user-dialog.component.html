@@ -1,0 +1,61 @@
+<div class="dialog-header">
+  <mat-icon>person_add</mat-icon>
+  <h2 mat-dialog-title>Tạo tài khoản mới</h2>
+  <button mat-icon-button mat-dialog-close class="close-btn"><mat-icon>close</mat-icon></button>
+</div>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="form-grid">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Vai trò</mat-label>
+      <mat-select formControlName="roleId">
+        <mat-option [value]="2">Bác sĩ</mat-option>
+        <mat-option [value]="3">Bệnh nhân</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" formControlName="email" />
+      @if (form.get('email')?.hasError('required') && form.get('email')?.touched) {
+        <mat-error>Bắt buộc nhập</mat-error>
+      }
+      @if (form.get('email')?.hasError('email') && form.get('email')?.touched) {
+        <mat-error>Email không hợp lệ</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Mật khẩu</mat-label>
+      <input matInput type="password" formControlName="password" />
+      <mat-hint>Tối thiểu 8 ký tự, có chữ hoa và chữ số</mat-hint>
+      @if (form.get('password')?.hasError('required') && form.get('password')?.touched) {
+        <mat-error>Bắt buộc nhập</mat-error>
+      }
+      @if (form.get('password')?.hasError('pattern') && form.get('password')?.touched) {
+        <mat-error>Chưa đủ mạnh (tối thiểu 8 ký tự, 1 hoa, 1 số)</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Họ tên</mat-label>
+      <input matInput formControlName="fullName" />
+      @if (form.get('fullName')?.hasError('required') && form.get('fullName')?.touched) {
+        <mat-error>Bắt buộc nhập</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Số điện thoại</mat-label>
+      <input matInput formControlName="phoneNumber" />
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Huỷ</button>
+  <button mat-raised-button color="primary" (click)="submit()" [disabled]="loading() || form.invalid">
+    @if (loading()) { <mat-spinner diameter="18" /> }
+    @else { Tạo tài khoản }
+  </button>
+</mat-dialog-actions>

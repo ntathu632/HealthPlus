@@ -1,0 +1,28 @@
+.dialog-header {
+  display: flex; align-items: center; gap: 10px; padding: 20px 24px 0;
+  > mat-icon { color: var(--hp-primary); font-size: 24px; width: 24px; height: 24px; }
+  h2 { margin: 0; flex: 1; font-size: 18px; font-weight: 700; }
+}
+mat-dialog-content { padding: 16px 24px !important; min-width: 380px; }
+.loading-center { display: flex; justify-content: center; padding: 40px; }
+.section-label {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.8px; color: var(--hp-text-secondary); margin: 0 0 10px;
+}
+.toggle-row {
+  display: flex; align-items: center; gap: 12px; padding: 8px 0;
+}
+.toggle-icon {
+  width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  &.push, &.email, &.sms, &.vaccine, &.medicine, &.followup { background: #E3F2FD; color: #1976D2; }
+}
+.toggle-info { flex: 1; span { font-size: 14px; color: var(--hp-text-primary); display: block; } small { font-size: 11px; color: var(--hp-text-secondary); } }
+.my-divider { margin: 12px 0 !important; }
+.time-row { display: flex; align-items: center; gap: 8px; }
+.time-field { flex: 1; }
+.time-sep { color: var(--hp-text-secondary); font-size: 18px; flex-shrink: 0; }
+.hint-text { font-size: 12px; color: var(--hp-text-secondary); margin: -4px 0 0; }
+.push-hint { margin: -6px 0 8px 48px; }
+mat-dialog-actions { padding: 8px 24px 20px !important; gap: 8px; }

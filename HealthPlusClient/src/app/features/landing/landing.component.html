@@ -1,0 +1,146 @@
+<div class="landing">
+
+  <app-public-nav />
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <span class="eyebrow">Quản lý sức khỏe toàn diện</span>
+        <h1>Chăm sóc sức khỏe<br />chủ động &amp; thông minh hơn</h1>
+        <p class="hero-sub">
+          Theo dõi sức khỏe, quản lý hồ sơ và trò chuyện cùng trợ lý AI —
+          hoàn toàn miễn phí. Khi cần ý kiến chuyên môn sâu hơn, đặt lịch
+          tư vấn trực tuyến với bác sĩ từ nhiều bệnh viện, ngay trong ứng dụng.
+        </p>
+        <div class="hero-actions">
+          <a mat-raised-button color="primary" class="cta-btn" routerLink="/auth/register">
+            Bắt đầu miễn phí <mat-icon>arrow_forward</mat-icon>
+          </a>
+          <a mat-stroked-button class="cta-btn-secondary" routerLink="/auth/login">
+            Tôi đã có tài khoản
+          </a>
+        </div>
+        <div class="hero-chips">
+          <span class="chip"><mat-icon>lock</mat-icon> Bảo mật dữ liệu</span>
+          <span class="chip"><mat-icon>bolt</mat-icon> Theo dõi sức khỏe miễn phí</span>
+          <span class="chip"><mat-icon>smart_toy</mat-icon> Trợ lý AI 24/7</span>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="blob" style="width:220px;height:220px;background:#90CAF9;top:-20px;right:10px"></div>
+        <div class="blob" style="width:160px;height:160px;background:#FFCDD2;bottom:-10px;left:0;animation-delay:1.5s"></div>
+
+        <div class="mock-card">
+          <div class="mock-header">
+            <div class="mock-avatar"></div>
+            <div class="mock-lines">
+              <div class="mock-line" style="width:60%;background:var(--gray-200)"></div>
+              <div class="mock-line" style="width:40%"></div>
+            </div>
+          </div>
+          <div class="mock-stats">
+            <div class="mock-stat">
+              <span class="mock-stat-value">36.5°</span>
+              <span class="mock-stat-label">Thân nhiệt</span>
+            </div>
+            <div class="mock-stat">
+              <span class="mock-stat-value">72</span>
+              <span class="mock-stat-label">Nhịp tim</span>
+            </div>
+          </div>
+          <svg class="mock-wave" viewBox="0 0 240 60" preserveAspectRatio="none">
+            <path d="M0,30 L40,30 L55,10 L70,50 L85,20 L100,30 L240,30"
+              fill="none" stroke="#1565C0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <div class="mock-row"></div>
+          <div class="mock-row" style="width:70%"></div>
+        </div>
+
+        <div class="float-badge" style="top:10px;left:-10px;animation-delay:0.3s"><mat-icon>event_available</mat-icon></div>
+        <div class="float-badge" style="bottom:60px;right:-20px;animation-delay:1s"><mat-icon style="color:var(--hp-danger)">medication</mat-icon></div>
+        <div class="float-badge" style="bottom:-14px;left:40px;animation-delay:1.8s"><mat-icon>vaccines</mat-icon></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Roles -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-head reveal" #revealEl>
+        <span class="section-eyebrow">Dành cho mọi đối tượng</span>
+        <h2>Một nền tảng, ba vai trò</h2>
+        <p>Mỗi vai trò có giao diện và công cụ riêng, phù hợp với công việc thực tế</p>
+      </div>
+
+      <div class="role-grid">
+        @for (r of roleCards; track r.title) {
+          <div class="role-card reveal" #revealEl [style.border-top]="'3px solid ' + r.color">
+            <div class="role-icon" [style.background]="r.color + '1A'"><mat-icon [style.color]="r.color">{{ r.icon }}</mat-icon></div>
+            <h3>{{ r.title }}</h3>
+            <p class="role-desc">{{ r.desc }}</p>
+            <ul>
+              @for (f of r.features; track f) {
+                <li><mat-icon>check_circle</mat-icon> {{ f }}</li>
+              }
+            </ul>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="section section-alt">
+    <div class="section-inner">
+      <div class="section-head reveal" #revealEl>
+        <span class="section-eyebrow">Tính năng nổi bật</span>
+        <h2>Mọi thứ bạn cần trong một nơi</h2>
+      </div>
+
+      <div class="feature-grid">
+        @for (f of featureTiles; track f.title) {
+          <div class="feature-tile reveal" #revealEl>
+            <div class="feature-icon" [style.background]="f.color + '1A'"><mat-icon [style.color]="f.color">{{ f.icon }}</mat-icon></div>
+            <h3>{{ f.title }}</h3>
+            <p>{{ f.desc }}</p>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-head reveal" #revealEl>
+        <span class="section-eyebrow">Cách hoạt động</span>
+        <h2>Bắt đầu chỉ với 3 bước</h2>
+      </div>
+
+      <div class="steps-row">
+        @for (s of steps; track s.number; let last = $last) {
+          <div class="step-item reveal" #revealEl>
+            <div class="step-number">{{ s.number }}</div>
+            <h3>{{ s.title }}</h3>
+            <p>{{ s.desc }}</p>
+          </div>
+          @if (!last) { <div class="step-connector"></div> }
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="cta-band reveal" #revealEl>
+    <h2>Sẵn sàng chăm sóc sức khỏe chủ động hơn?</h2>
+    <p>Tạo tài khoản miễn phí — chỉ mất chưa đến 1 phút</p>
+    <a mat-raised-button class="cta-band-btn" routerLink="/auth/register">
+      Đăng ký ngay <mat-icon>arrow_forward</mat-icon>
+    </a>
+  </section>
+
+  <app-public-footer />
+
+</div>

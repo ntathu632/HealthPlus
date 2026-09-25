@@ -1,0 +1,32 @@
+.dialog-header {
+  display: flex; align-items: center; gap: 10px; padding: 20px 24px 0;
+  mat-icon { color: var(--hp-primary); font-size: 26px; width: 26px; height: 26px; }
+  h2 { margin: 0; flex: 1; font-size: 18px; font-weight: 700; }
+  .close-btn { color: var(--hp-text-secondary); }
+}
+mat-dialog-content { padding: 16px 24px !important; max-height: 65vh; }
+.metric-form { display: flex; flex-direction: column; gap: 4px; }
+
+.bmi-preview {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 14px; border-radius: 12px; margin-bottom: 8px;
+  background: #BBDEFB;
+  &.bmi-overweight  { background: #FCE4EC; }
+  &.bmi-obese       { background: #FFEBEE; }
+  &.bmi-underweight { background: #E3F2FD; }
+}
+.bmi-val   { font-size: 32px; font-weight: 700; color: var(--hp-text-primary); }
+.bmi-label { font-size: 13px; font-weight: 600; color: var(--hp-text-secondary); }
+.bmi-preview.bmi-normal .bmi-label      { color: #0D47A1; }
+.bmi-preview.bmi-overweight .bmi-label  { color: #AD1457; }
+.bmi-preview.bmi-obese .bmi-label       { color: #C62828; }
+.bmi-preview.bmi-underweight .bmi-label { color: #1565C0; }
+
+.section-label {
+  font-size: 12px; font-weight: 600; color: var(--hp-text-secondary);
+  text-transform: uppercase; letter-spacing: 0.5px; margin-top: 8px;
+}
+.two-col   { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0 12px; }
+.full-width { width: 100%; }
+mat-dialog-actions { padding: 8px 24px 20px !important; gap: 8px; }

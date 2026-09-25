@@ -1,0 +1,119 @@
+<div class="page">
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h2 class="page-title">Lịch sử khám bệnh</h2>
+      <p class="page-subtitle">Theo dõi toàn bộ lịch sử thăm khám</p>
+    </div>
+    <button mat-raised-button color="primary" (click)="openCreate()">
+      <mat-icon>add</mat-icon> Thêm lần khám
+    </button>
+  </div>
+
+  <!-- Filter bar -->
+  <div class="filter-bar">
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Lọc theo hồ sơ</mat-label>
+      <mat-select [(ngModel)]="selectedRecordId" (ngModelChange)="onFilterChange()">
+        <mat-option value="">Tất cả hồ sơ</mat-option>
+        @for (r of healthRecords(); track r.id) {
+          <mat-option [value]="r.id">{{ r.profileName }} — {{ r.fullName }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    @if (upcomingCount() > 0) {
+      <div class="upcoming-badge">
+        <mat-icon>event_upcoming</mat-icon>
+        {{ upcomingCount() }} lịch tái khám trong 30 ngày
+      </div>
+    }
+  </div>
+
+  @if (loading()) {
+    <div class="loading-center"><mat-spinner diameter="48" /></div>
+  }
+
+  @if (!loading() && items().length === 0) {
+    <div class="empty-state">
+      <mat-icon>local_hospital</mat-icon>
+      <h3>Chưa có lịch sử khám</h3>
+      <p>Ghi lại mỗi lần thăm khám để theo dõi sức khỏe tốt hơn</p>
+      <button mat-raised-button color="primary" (click)="openCreate()">
+        <mat-icon>add</mat-icon> Thêm lần khám đầu tiên
+      </button>
+    </div>
+  }
+
+  @if (!loading() && items().length > 0) {
+    <div class="history-list">
+      @for (item of items(); track item.id) {
+        <mat-card class="history-card">
+          <!-- Left: Date column -->
+          <div class="date-col">
+            <span class="date-day">{{ item.visitDate | date:'dd' }}</span>
+            <span class="date-month">{{ item.visitDate | date:'MMM yyyy' }}</span>
+            @if (isUpcoming(item.followUpDate)) {
+              <div class="followup-dot" matTooltip="Tái khám {{ item.followUpDate | date:'dd/MM' }}"></div>
+            }
+          </div>
+
+          <!-- Center: Info -->
+          <div class="info-col">
+            <div class="info-top">
+              <span class="hospital">{{ item.hospital || 'Không rõ bệnh viện' }}</span>
+              @if (item.specialty) {
+                <span class="specialty-chip">{{ item.specialty }}</span>
+              }
+            </div>
+            @if (item.doctorName) {
+              <div class="doctor">
+                <mat-icon>person</mat-icon> {{ item.doctorName }}
+              </div>
+            }
+            @if (item.diagnosis) {
+              <div class="diagnosis">
+                <mat-icon>assignment</mat-icon>
+                <span>{{ item.diagnosis | slice:0:120 }}{{ item.diagnosis.length > 120 ? '...' : '' }}</span>
+              </div>
+            }
+            @if (item.followUpDate) {
+              <div class="followup" [class.urgent]="isUpcoming(item.followUpDate)">
+                <mat-icon>event_repeat</mat-icon>
+                Tái khám: {{ item.followUpDate | date:'dd/MM/yyyy' }}
+                @if (isUpcoming(item.followUpDate)) {
+                  <span class="days-left">còn {{ daysUntil(item.followUpDate) }} ngày</span>
+                }
+              </div>
+            }
+          </div>
+
+          <!-- Right: Actions -->
+          <div class="actions-col">
+            <button mat-icon-button (click)="openDetail(item)" matTooltip="Xem chi tiết">
+              <mat-icon>visibility</mat-icon>
+            </button>
+            <button mat-icon-button (click)="openEdit(item)" matTooltip="Chỉnh sửa">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button class="del-btn" (click)="delete(item)" matTooltip="Xoá">
+              <mat-icon>delete_outline</mat-icon>
+            </button>
+          </div>
+        </mat-card>
+      }
+
+      <!-- Pagination info -->
+      @if (totalCount() > pageSize) {
+        <div class="pagination-row">
+          <span class="total-text">Hiển thị {{ items().length }} / {{ totalCount() }} bản ghi</span>
+          @if (hasMore()) {
+            <button mat-button color="primary" (click)="loadMore()">
+              Xem thêm <mat-icon>expand_more</mat-icon>
+            </button>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>

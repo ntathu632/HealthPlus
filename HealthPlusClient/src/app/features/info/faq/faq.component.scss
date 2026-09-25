@@ -1,0 +1,6 @@
+.faq-list {
+  display: block; margin-top: 20px;
+  mat-expansion-panel { box-shadow: none !important; border: 1px solid var(--hp-border); border-radius: 10px !important; margin-bottom: 10px; }
+  mat-panel-title { font-weight: 600; color: var(--hp-text-primary); }
+  p { font-size: 14px; color: var(--hp-text-secondary); line-height: 1.6; margin: 0; }
+}

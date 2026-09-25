@@ -1,0 +1,53 @@
+<app-info-page-layout
+  title="Giới thiệu về Health+"
+  subtitle="Nền tảng quản lý sức khỏe cá nhân — kết nối bệnh nhân, bác sĩ và quản trị viên trên cùng một hệ thống"
+  icon="favorite">
+
+  <h2>Sứ mệnh</h2>
+  <p>
+    Chúng tôi tin rằng việc theo dõi sức khỏe chủ động nên đơn giản và dễ tiếp cận với mọi người.
+    Health+ được xây dựng để giúp bạn và gia đình quản lý thông tin sức khỏe rõ ràng, có tổ chức,
+    và luôn sẵn sàng khi cần đến — dù là lúc đặt lịch khám hay khi bác sĩ cần xem lại bệnh sử.
+    Toàn bộ tính năng theo dõi sức khỏe đều <strong>miễn phí</strong>; khi cần ý kiến chuyên môn sâu hơn,
+    bạn có thể đặt lịch <strong>tư vấn trực tuyến trả phí</strong> với bác sĩ từ nhiều bệnh viện khác nhau.
+  </p>
+
+  <h2>Dành cho mọi đối tượng</h2>
+  <div class="role-grid">
+    @for (r of roleCards; track r.title) {
+      <div class="role-card" [style.border-top]="'3px solid ' + r.color">
+        <div class="role-icon" [style.background]="r.color + '1A'"><mat-icon [style.color]="r.color">{{ r.icon }}</mat-icon></div>
+        <h3>{{ r.title }}</h3>
+        <p>{{ r.desc }}</p>
+      </div>
+    }
+  </div>
+
+  <h2>Cách hoạt động</h2>
+  <div class="steps-row">
+    @for (s of steps; track s.number; let last = $last) {
+      <div class="step-item">
+        <div class="step-number">{{ s.number }}</div>
+        <h3>{{ s.title }}</h3>
+        <p>{{ s.desc }}</p>
+      </div>
+      @if (!last) { <div class="step-connector"></div> }
+    }
+  </div>
+
+  <h2>Tính năng chính</h2>
+  <ul>
+    <li>Hồ sơ sức khỏe điện tử với biểu đồ theo dõi chỉ số theo thời gian (miễn phí)</li>
+    <li>Lịch sử khám bệnh, chẩn đoán và đơn thuốc điện tử (miễn phí)</li>
+    <li>Quản lý và nhắc lịch tiêm chủng (miễn phí)</li>
+    <li>Nhắc nhở uống thuốc và tái khám thông minh (miễn phí)</li>
+    <li>Trợ lý AI trò chuyện về sức khỏe, hỏi đáp không giới hạn (miễn phí)</li>
+    <li>Đặt lịch tư vấn trực tuyến với bác sĩ từ nhiều bệnh viện (tính phí theo lượt tư vấn)</li>
+  </ul>
+  <p>Xem chi tiết từng tính năng tại trang <a routerLink="/tinh-nang">Tính năng</a>.</p>
+
+  <p>
+    Health+ vẫn đang trong giai đoạn hoàn thiện. Chúng tôi tiếp tục lắng nghe và cải thiện
+    sản phẩm để phục vụ người dùng tốt hơn.
+  </p>
+</app-info-page-layout>

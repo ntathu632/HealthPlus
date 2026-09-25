@@ -1,0 +1,39 @@
+<div class="page">
+  <div class="page-header">
+    <h2 class="page-title">Cấu hình hệ thống</h2>
+    <p class="page-subtitle">Các thông số cấu hình chung của hệ thống</p>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-center"><mat-spinner diameter="48" /></div>
+  }
+
+  @if (!loading() && settings().length === 0) {
+    <div class="empty-state">
+      <mat-icon>settings</mat-icon>
+      <h3>Chưa có cấu hình nào</h3>
+      <p>Hệ thống chưa có system setting nào được khởi tạo</p>
+    </div>
+  }
+
+  @if (!loading() && settings().length > 0) {
+    <div class="list">
+      @for (s of settings(); track s.id) {
+        <mat-card class="setting-card">
+          <div class="setting-info">
+            <span class="key">{{ s.settingKey }}</span>
+            @if (s.description) { <span class="desc">{{ s.description }}</span> }
+          </div>
+          <mat-form-field appearance="outline" class="value-field">
+            <mat-label>Giá trị</mat-label>
+            <input matInput [(ngModel)]="draft[s.settingKey]" />
+          </mat-form-field>
+          <button mat-raised-button color="primary" [disabled]="saving() === s.settingKey" (click)="save(s)">
+            @if (saving() === s.settingKey) { <mat-spinner diameter="18" /> }
+            @else { Lưu }
+          </button>
+        </mat-card>
+      }
+    </div>
+  }
+</div>

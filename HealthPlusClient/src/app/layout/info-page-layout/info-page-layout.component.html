@@ -1,0 +1,21 @@
+<div class="info-page">
+  <app-public-nav />
+
+  <div class="page-hero">
+    <div class="blob" style="width:200px;height:200px;background:#90CAF9;top:-40px;right:5%"></div>
+    <div class="blob" style="width:140px;height:140px;background:#FFCDD2;bottom:-30px;left:8%;animation-delay:1.2s"></div>
+    <div class="page-hero-inner">
+      <div class="page-icon"><mat-icon>{{ icon() }}</mat-icon></div>
+      <h1>{{ title() }}</h1>
+      @if (subtitle()) { <p>{{ subtitle() }}</p> }
+    </div>
+  </div>
+
+  <main class="info-body">
+    <div class="info-content">
+      <ng-content></ng-content>
+    </div>
+  </main>
+
+  <app-public-footer />
+</div>

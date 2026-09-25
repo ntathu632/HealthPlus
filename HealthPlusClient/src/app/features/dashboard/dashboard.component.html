@@ -1,0 +1,69 @@
+<div class="page">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div>
+      <p class="hero-date">{{ today | date:'EEEE, dd MMMM yyyy':'':'vi' }}</p>
+      <h1 class="hero-title">Xin chào, <span>{{ firstName() }}</span></h1>
+      <p class="hero-sub">Hãy theo dõi sức khỏe của bạn mỗi ngày</p>
+    </div>
+    <a class="hero-btn" routerLink="/health-records">
+      <mat-icon>add</mat-icon> Thêm hồ sơ
+    </a>
+  </div>
+
+  <!-- Stats -->
+  <div class="stat-grid">
+    @for (s of stats(); track s.label) {
+      <a class="stat-card" [routerLink]="s.route">
+        <div class="stat-icon" [style.background]="s.lightBg">
+          <mat-icon [style.color]="s.fg">{{ s.icon }}</mat-icon>
+        </div>
+        <div>
+          <p class="stat-val" [style.color]="s.fg">{{ s.value }}</p>
+          <p class="stat-lbl">{{ s.label }}</p>
+        </div>
+      </a>
+    }
+  </div>
+
+  <!-- Charts -->
+  <div class="charts-row">
+    <mat-card class="chart-card">
+      <h3 class="chart-title">Tổng quan số lượng</h3>
+      @if (recordsLoading() || followUpsLoading() || vaccinesLoading() || remindersLoading()) {
+        <div class="chart-loading"><mat-spinner diameter="32" /></div>
+      } @else {
+        <div class="chart-wrap">
+          <canvas baseChart [data]="countsChartData()" [options]="countsChartOptions" type="bar"></canvas>
+        </div>
+      }
+    </mat-card>
+
+    <mat-card class="chart-card">
+      <h3 class="chart-title">Trạng thái vaccine</h3>
+      @if (allVaccinesLoading()) {
+        <div class="chart-loading"><mat-spinner diameter="32" /></div>
+      } @else if (allVaccines().length === 0) {
+        <div class="chart-empty">Chưa có dữ liệu tiêm chủng nào</div>
+      } @else {
+        <div class="chart-wrap">
+          <canvas baseChart [data]="vaccineStatusData()" [options]="vaccineStatusOptions" type="doughnut"></canvas>
+        </div>
+      }
+    </mat-card>
+
+    <mat-card class="chart-card">
+      <h3 class="chart-title">{{ metricsLoading() || metrics().length === 0 ? 'Chỉ số sức khỏe theo thời gian' : metricChartTitle() }}</h3>
+      @if (metricsLoading()) {
+        <div class="chart-loading"><mat-spinner diameter="32" /></div>
+      } @else if (metrics().length === 0) {
+        <div class="chart-empty">Chưa có chỉ số sức khỏe nào được ghi nhận</div>
+      } @else {
+        <div class="chart-wrap">
+          <canvas baseChart [data]="metricChartData()" [options]="metricChartOptions" type="line"></canvas>
+        </div>
+      }
+    </mat-card>
+  </div>
+</div>

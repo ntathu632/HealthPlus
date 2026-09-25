@@ -1,0 +1,84 @@
+<div class="dialog-header">
+  <mat-icon>{{ isEdit ? 'edit_notifications' : 'add_alert' }}</mat-icon>
+  <h2 mat-dialog-title>{{ isEdit ? 'Sửa nhắc nhở' : 'Tạo nhắc nhở' }}</h2>
+  <button mat-icon-button mat-dialog-close><mat-icon>close</mat-icon></button>
+</div>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="form-grid">
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Tiêu đề</mat-label>
+      <input matInput formControlName="title" placeholder="Uống thuốc buổi sáng..." />
+      <mat-icon matSuffix>title</mat-icon>
+      @if (form.get('title')?.hasError('required') && form.get('title')?.touched) {
+        <mat-error>Vui lòng nhập tiêu đề</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Loại nhắc nhở</mat-label>
+      <mat-select formControlName="reminderType">
+        <mat-option value="Medicine">💊 Uống thuốc</mat-option>
+        <mat-option value="Vaccine">💉 Tiêm vaccine</mat-option>
+        <mat-option value="FollowUp">📅 Tái khám</mat-option>
+        <mat-option value="Checkup">🩺 Khám định kỳ</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Kênh thông báo</mat-label>
+      <mat-select formControlName="channel">
+        <mat-option value="Push">🔔 Push notification</mat-option>
+        <mat-option value="Email">✉️ Email</mat-option>
+        <mat-option value="Sms">💬 SMS</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Thời gian nhắc</mat-label>
+      <input matInput type="datetime-local" formControlName="remindAt" />
+      @if (form.get('remindAt')?.hasError('required') && form.get('remindAt')?.touched) {
+        <mat-error>Vui lòng chọn thời gian</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Lặp lại</mat-label>
+      <mat-select formControlName="repeatType">
+        <mat-option value="None">Không lặp</mat-option>
+        <mat-option value="Daily">Hàng ngày</mat-option>
+        <mat-option value="Weekly">Hàng tuần</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    @if (form.get('repeatType')?.value && form.get('repeatType')?.value !== 'None') {
+      <mat-form-field appearance="outline">
+        <mat-label>Lặp đến ngày</mat-label>
+        <input matInput type="date" formControlName="repeatUntil" />
+      </mat-form-field>
+    }
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nội dung thông báo</mat-label>
+      <textarea matInput formControlName="message" rows="2"
+        placeholder="Uống 1 viên Paracetamol 500mg..."></textarea>
+    </mat-form-field>
+
+    @if (isEdit) {
+      <div class="enabled-row full-width">
+        <span>Bật nhắc nhở này</span>
+        <mat-slide-toggle formControlName="isEnabled" color="primary" />
+      </div>
+    }
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Huỷ</button>
+  <button mat-raised-button color="primary" (click)="submit()" [disabled]="loading() || form.invalid">
+    @if (loading()) { <mat-spinner diameter="18" /> }
+    @else { {{ isEdit ? 'Lưu thay đổi' : 'Tạo nhắc nhở' }} }
+  </button>
+</mat-dialog-actions>

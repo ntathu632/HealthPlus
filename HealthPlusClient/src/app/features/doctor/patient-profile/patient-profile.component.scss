@@ -1,0 +1,54 @@
+.page { max-width: 1100px; margin: 0 auto; }
+.back-link {
+  display: inline-flex; align-items: center; gap: 4px; color: var(--hp-text-secondary);
+  text-decoration: none; font-size: 13px; margin-bottom: 16px;
+  mat-icon { font-size: 18px; width: 18px; height: 18px; }
+  &:hover { color: var(--hp-primary); }
+}
+.loading-center { display: flex; justify-content: center; padding: 80px 0; }
+
+.patient-header {
+  display: flex; align-items: center; gap: 16px; margin-bottom: 20px;
+}
+.avatar {
+  width: 56px; height: 56px; border-radius: 50%; flex-shrink: 0;
+  background: linear-gradient(135deg, #0D47A1, #1565C0);
+  color: white; font-size: 18px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; overflow: hidden;
+  img { width: 100%; height: 100%; object-fit: cover; }
+}
+.header-info h2 { margin: 0 0 2px; font-size: 20px; font-weight: 700; color: var(--hp-text-primary); }
+.header-info span { font-size: 13px; color: var(--hp-text-secondary); }
+
+.tabs { background: white; border-radius: var(--hp-radius, 12px); box-shadow: var(--hp-shadow); }
+.tab-body { padding: 20px; }
+.tab-actions { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.hint { font-size: 12px; color: var(--hp-text-secondary); font-style: italic; }
+
+.empty-inline {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  padding: 40px; text-align: center; color: var(--hp-text-secondary);
+  mat-icon { font-size: 40px; width: 40px; height: 40px; color: var(--hp-border); }
+  p { margin: 0; font-size: 13px; }
+}
+
+.cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+.info-card {
+  padding: 14px !important; border-radius: 10px !important;
+  border: 1px solid var(--hp-border); box-shadow: none !important; margin-bottom: 12px;
+}
+.cards-grid .info-card { margin-bottom: 0; }
+.rx-card { cursor: pointer; transition: box-shadow 0.2s; &:hover { box-shadow: var(--hp-shadow) !important; } }
+.card-title { font-size: 14px; font-weight: 600; color: var(--hp-text-primary); display: block; margin-bottom: 6px; }
+.card-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.card-actions { display: flex; flex-shrink: 0; margin-top: -6px; margin-right: -8px;
+  button { width: 32px; height: 32px; line-height: 32px; }
+  mat-icon { font-size: 16px; width: 16px; height: 16px; }
+}
+.del-btn { color: #BDBDBD !important; &:hover { color: var(--hp-danger) !important; } }
+.card-line { font-size: 12px; color: var(--hp-text-secondary); margin: 2px 0; }
+.chips-row { display: flex; gap: 6px; margin-bottom: 6px; }
+.chip {
+  display: inline-block; font-size: 11px; color: var(--hp-text-secondary);
+  background: #F5F5F5; border-radius: 20px; padding: 2px 8px;
+}

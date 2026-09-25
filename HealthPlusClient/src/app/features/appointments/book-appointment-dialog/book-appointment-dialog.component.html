@@ -1,0 +1,92 @@
+<div class="dialog-header">
+  <mat-icon>event</mat-icon>
+  <h2 mat-dialog-title>{{ step() === 'form' ? 'Đặt lịch hẹn khám' : 'Xác nhận thanh toán' }}</h2>
+  <button mat-icon-button mat-dialog-close class="close-btn"><mat-icon>close</mat-icon></button>
+</div>
+
+<mat-dialog-content>
+  @if (step() === 'form') {
+    @if (loadingDoctors()) {
+      <div class="loading-center"><mat-spinner diameter="36" /></div>
+    } @else {
+      <form [formGroup]="form" class="form-grid">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Chọn bác sĩ</mat-label>
+          <mat-select formControlName="doctorId">
+            @for (d of doctors(); track d.id) {
+              <mat-option [value]="d.id">
+                {{ d.fullName }}@if (d.specialty) { — {{ d.specialty }} }
+                @if (d.consultationFee > 0) { ({{ d.consultationFee | number }}đ) } @else { (Miễn phí) }
+              </mat-option>
+            }
+          </mat-select>
+          @if (form.get('doctorId')?.hasError('required') && form.get('doctorId')?.touched) {
+            <mat-error>Vui lòng chọn bác sĩ</mat-error>
+          }
+        </mat-form-field>
+
+        @if (doctors().length === 0) {
+          <p class="hint full-width">Hiện chưa có bác sĩ nào đang hoạt động trong hệ thống.</p>
+        }
+
+        @if (selectedDoctor(); as doc) {
+          <div class="doctor-info full-width">
+            @if (doc.hospitalName) {
+              <span class="info-row"><mat-icon>local_hospital</mat-icon> {{ doc.hospitalName }}</span>
+            }
+            <span class="info-row fee" [class.free]="doc.consultationFee === 0">
+              <mat-icon>{{ doc.consultationFee > 0 ? 'payments' : 'volunteer_activism' }}</mat-icon>
+              @if (doc.consultationFee > 0) {
+                Phí tư vấn: <strong>{{ doc.consultationFee | number }}đ</strong>
+              } @else {
+                Miễn phí tư vấn
+              }
+            </span>
+          </div>
+        }
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Ngày giờ khám</mat-label>
+          <input matInput type="datetime-local" formControlName="appointmentTime" />
+          @if (form.get('appointmentTime')?.hasError('required') && form.get('appointmentTime')?.touched) {
+            <mat-error>Vui lòng chọn ngày giờ</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Lý do khám</mat-label>
+          <textarea matInput formControlName="reason" rows="3" placeholder="Mô tả triệu chứng, lý do muốn khám..."></textarea>
+        </mat-form-field>
+      </form>
+    }
+  } @else if (createdAppointment(); as appt) {
+    <div class="payment-step">
+      <div class="payment-summary">
+        <div class="summary-row"><span>Bác sĩ</span><strong>{{ appt.doctorName }}</strong></div>
+        <div class="summary-row"><span>Thời gian</span><strong>{{ appt.appointmentTime | date:'HH:mm dd/MM/yyyy' }}</strong></div>
+        <div class="summary-row total"><span>Số tiền</span><strong>{{ appt.fee | number }}đ</strong></div>
+      </div>
+      <div class="demo-note">
+        <mat-icon>info</mat-icon>
+        <span>Đây là thanh toán mô phỏng (demo) — chưa nối cổng thanh toán thật.</span>
+      </div>
+    </div>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  @if (step() === 'form') {
+    <button mat-button mat-dialog-close>Huỷ</button>
+    <button mat-raised-button color="primary" (click)="submit()"
+      [disabled]="submitting() || form.invalid || doctors().length === 0">
+      @if (submitting()) { <mat-spinner diameter="18" /> }
+      @else { Đặt lịch hẹn }
+    </button>
+  } @else {
+    <button mat-button mat-dialog-close>Để sau</button>
+    <button mat-raised-button color="primary" (click)="confirmPayment()" [disabled]="paying()">
+      @if (paying()) { <mat-spinner diameter="18" /> }
+      @else { Xác nhận thanh toán }
+    </button>
+  }
+</mat-dialog-actions>

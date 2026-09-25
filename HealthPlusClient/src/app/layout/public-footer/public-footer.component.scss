@@ -1,0 +1,45 @@
+.footer { position: relative; background: var(--hp-primary-dark); padding: 52px 24px 32px; }
+.footer-top-line {
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, #64B5F6, #1565C0 35%, #6A1B9A 70%, #EF9A9A);
+}
+
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.logo-mark { position: relative; width: 30px; height: 30px; flex-shrink: 0; }
+.cross-h, .cross-v { position: absolute; top: 50%; left: 50%; background: #D32F2F; border-radius: 3px; }
+.cross-h { width: 21px; height: 7px; transform: translate(-50%, -50%); }
+.cross-v { width: 7px; height: 21px; transform: translate(-50%, -50%); }
+.heart { position: absolute; bottom: -1px; right: -1px; font-size: 11px; width: 11px; height: 11px; color: white; }
+.brand-name { font-size: 20px; font-weight: 800; color: white; letter-spacing: -0.4px; }
+.plus { color: #90CAF9; }
+
+.footer-inner {
+  max-width: 1120px; margin: 0 auto;
+  display: grid; grid-template-columns: 1.5fr repeat(4, 1fr); gap: 24px;
+}
+.footer-brand { padding-right: 12px; }
+.footer-tagline { font-size: 13px; color: rgba(255,255,255,.7); margin: 14px 0 0; line-height: 1.65; max-width: 260px; }
+
+.footer-col h4 {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; font-weight: 700; color: white; margin: 0 0 16px;
+  text-transform: uppercase; letter-spacing: 0.6px;
+}
+.dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.footer-links {
+  display: flex; flex-direction: column; gap: 11px;
+  a { color: rgba(255,255,255,.72); text-decoration: none; font-size: 13.5px; transition: color 0.15s; }
+  a:hover { color: white; }
+}
+
+.footer-bottom { padding: 20px 0 0; text-align: center; margin-top: 36px; border-top: 1px solid rgba(255,255,255,.12); }
+.footer-copy { font-size: 12px; color: rgba(255,255,255,.5); margin: 0; }
+
+@media (max-width: 900px) {
+  .footer-inner { grid-template-columns: repeat(3, 1fr); }
+  .footer-brand { grid-column: 1 / -1; padding-right: 0; margin-bottom: 8px; }
+  .footer-tagline { max-width: 420px; }
+}
+@media (max-width: 560px) {
+  .footer-inner { grid-template-columns: repeat(2, 1fr); }
+}

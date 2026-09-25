@@ -1,0 +1,95 @@
+.page { max-width: 1000px; margin: 0 auto; }
+.page-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px; }
+.header-actions { display: flex; gap: 8px; flex-shrink: 0; }
+.page-title { font-size: 22px; font-weight: 700; color: var(--hp-text-primary); margin: 0 0 4px; }
+.page-subtitle { color: var(--hp-text-secondary); font-size: 14px; margin: 0; }
+.loading-center { display: flex; justify-content: center; padding: 80px 0; }
+
+.filter-row {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
+  flex-wrap: wrap; margin-bottom: 20px;
+}
+
+// Dùng mat-chip-listbox của Angular Material thay cho <button> tự viết — Material tự lo việc
+// canh hàng/kích thước nhất quán giữa các chip, tránh mọi lỗi lệch dòng/lệch font đã gặp phải
+// với layout tự viết trước đây.
+.status-tabs {
+  --mdc-chip-container-height: 32px;
+  --mdc-chip-label-text-size: 13px;
+  --mdc-chip-label-text-color: var(--hp-text-secondary);
+  --mdc-chip-elevated-container-color: white;
+  --mdc-chip-outline-color: var(--hp-border);
+  --mdc-chip-selected-label-text-color: white;
+  --mdc-chip-elevated-selected-container-color: var(--hp-primary);
+}
+.search-field {
+  width: 260px; flex-shrink: 0;
+  ::ng-deep .mat-mdc-text-field-wrapper { height: 44px; }
+  ::ng-deep .mat-mdc-form-field-infix { min-height: 44px; padding-top: 10px; padding-bottom: 10px; }
+}
+.tab-count {
+  padding: 1px 6px; border-radius: 10px; font-size: 11px; font-weight: 700; margin-left: 4px;
+  &.pending    { background: #FCE4EC; color: #AD1457; }
+  &.confirmed  { background: #E3F2FD; color: #1565C0; }
+  &.completed  { background: #BBDEFB; color: #0D47A1; }
+  &.cancelled  { background: #FFEBEE; color: #C62828; }
+}
+.active .tab-count { background: rgba(255,255,255,0.25); color: white; }
+
+.empty-state {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 80px 24px; text-align: center;
+  mat-icon { font-size: 64px; width: 64px; height: 64px; color: var(--hp-border); margin-bottom: 16px; }
+  h3 { font-size: 18px; font-weight: 600; color: var(--hp-text-primary); margin: 0 0 8px; }
+  p  { color: var(--hp-text-secondary); margin: 0 0 24px; font-size: 14px; }
+}
+
+.list { display: flex; flex-direction: column; gap: 10px; }
+.row-card {
+  display: flex !important; flex-direction: row !important; align-items: stretch; gap: 12px; padding: 0 !important;
+  border-radius: var(--hp-radius, 12px) !important; box-shadow: var(--hp-shadow) !important; overflow: hidden;
+}
+.status-bar {
+  width: 4px; flex-shrink: 0;
+  &.pending    { background: #AD1457; }
+  &.confirmed  { background: #1976D2; }
+  &.completed  { background: #0D47A1; }
+  &.cancelled  { background: #C62828; }
+}
+.row-body { flex: 1; padding: 14px 16px; min-width: 0; }
+.doctor-name {
+  display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: var(--hp-text-primary);
+  margin-bottom: 4px;
+  mat-icon { font-size: 18px; width: 18px; height: 18px; color: var(--hp-text-secondary); }
+}
+.time { font-size: 12px; color: var(--hp-text-secondary); }
+.reason { font-size: 13px; color: var(--hp-text-primary); margin: 6px 0 0; }
+.notes { font-size: 12px; color: var(--hp-text-secondary); margin: 4px 0 0; font-style: italic; }
+
+// Cột riêng bên phải, sát mép khung — chứa tag trạng thái + nút huỷ (nếu có) xếp dọc, luôn
+// cùng 1 vị trí/độ rộng cho mọi dòng bất kể trạng thái đó có nút huỷ hay không.
+.actions-slot {
+  width: 100px; flex-shrink: 0; padding: 14px 14px 14px 12px;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  border-left: 1px solid var(--hp-border);
+}
+.status-chip {
+  width: 100%; box-sizing: border-box; text-align: center;
+  padding: 3px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; white-space: nowrap;
+  &.pending    { background: #FCE4EC; color: #AD1457; }
+  &.confirmed  { background: #E3F2FD; color: #1565C0; }
+  &.completed  { background: #BBDEFB; color: #0D47A1; }
+  &.cancelled  { background: #FFEBEE; color: #C62828; }
+}
+.del-btn { color: #BDBDBD !important; &:hover { color: var(--hp-danger) !important; } }
+
+.pay-row { display: flex; align-items: center; gap: 10px; margin-top: 8px; flex-wrap: wrap; }
+.pay-chip {
+  display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px;
+  border-radius: 20px; font-size: 11.5px; font-weight: 600; white-space: nowrap;
+  mat-icon { font-size: 14px; width: 14px; height: 14px; }
+  &.paid   { background: #BBDEFB; color: #0D47A1; margin-top: 8px; }
+  &.unpaid { background: #FFEBEE; color: #C62828; }
+}
+
+.video-btn { margin-top: 10px; display: inline-flex; align-items: center; gap: 6px; width: fit-content; }

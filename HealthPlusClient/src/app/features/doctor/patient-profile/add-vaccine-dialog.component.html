@@ -1,0 +1,95 @@
+<div class="dialog-header">
+  <mat-icon>vaccines</mat-icon>
+  <h2 mat-dialog-title>{{ isEdit ? 'Sửa mũi tiêm' : 'Thêm mũi tiêm' }}</h2>
+  <button mat-icon-button mat-dialog-close class="close-btn"><mat-icon>close</mat-icon></button>
+</div>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="form-grid">
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Hồ sơ sức khỏe</mat-label>
+      <mat-select formControlName="healthRecordId">
+        @for (r of data.healthRecords; track r.id) {
+          <mat-option [value]="r.id">{{ r.profileName }} — {{ r.fullName }}</mat-option>
+        }
+      </mat-select>
+      @if (form.get('healthRecordId')?.hasError('required') && form.get('healthRecordId')?.touched) {
+        <mat-error>Vui lòng chọn hồ sơ</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Tên vaccine</mat-label>
+      <input matInput formControlName="vaccineName" placeholder="Nhập tên vaccine..." />
+      @if (form.get('vaccineName')?.hasError('required') && form.get('vaccineName')?.touched) {
+        <mat-error>Bắt buộc nhập</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Số mũi tiêm</mat-label>
+      <input matInput type="number" formControlName="doseNumber" min="1" max="10" />
+      <mat-hint>Mũi 1, 2, 3...</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Trạng thái</mat-label>
+      <mat-select formControlName="status">
+        <mat-option value="Completed">✅ Đã tiêm</mat-option>
+        <mat-option value="Scheduled">📅 Lịch tiêm</mat-option>
+        <mat-option value="Overdue">⚠️ Quá hạn</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Ngày tiêm</mat-label>
+      <input matInput type="date" formControlName="injectionDate" />
+      @if (form.get('injectionDate')?.hasError('required') && form.get('injectionDate')?.touched) {
+        <mat-error>Bắt buộc nhập</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Ngày tiêm kế tiếp</mat-label>
+      <input matInput type="date" formControlName="nextDueDate" />
+      <mat-hint>Để trống nếu không có</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Nhà sản xuất</mat-label>
+      <input matInput formControlName="manufacturer" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Số lô</mat-label>
+      <input matInput formControlName="lotNumber" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nơi tiêm</mat-label>
+      <input matInput formControlName="location" />
+      <mat-icon matSuffix>location_on</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Tác dụng phụ (nếu có)</mat-label>
+      <textarea matInput formControlName="sideEffects" rows="2"
+        placeholder="Sốt nhẹ, đau tại chỗ tiêm..."></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Ghi chú</mat-label>
+      <textarea matInput formControlName="notes" rows="2"></textarea>
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Huỷ</button>
+  <button mat-raised-button color="primary" (click)="submit()" [disabled]="loading() || form.invalid">
+    @if (loading()) { <mat-spinner diameter="18" /> }
+    @else { {{ isEdit ? 'Lưu thay đổi' : 'Thêm mũi tiêm' }} }
+  </button>
+</mat-dialog-actions>

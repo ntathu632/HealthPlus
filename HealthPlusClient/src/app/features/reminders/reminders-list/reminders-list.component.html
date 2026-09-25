@@ -1,0 +1,148 @@
+<div class="page">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h2 class="page-title">Nhắc nhở sức khỏe</h2>
+      <p class="page-subtitle">Quản lý lịch nhắc thuốc, vaccine, tái khám</p>
+    </div>
+    <div class="header-actions">
+      <button mat-stroked-button (click)="openSettings()" matTooltip="Cài đặt thông báo">
+        <mat-icon>tune</mat-icon> Cài đặt
+      </button>
+      <button mat-raised-button color="primary" (click)="openCreate()">
+        <mat-icon>add_alert</mat-icon> Thêm nhắc nhở
+      </button>
+    </div>
+  </div>
+
+  <!-- Upcoming banner -->
+  @if (!upcomingLoading() && upcoming().length > 0) {
+    <div class="upcoming-banner">
+      <mat-icon>alarm</mat-icon>
+      <div class="upcoming-content">
+        <strong>{{ upcoming().length }} nhắc nhở trong 24 giờ tới</strong>
+        <div class="upcoming-chips">
+          @for (r of upcoming(); track r.id) {
+            <span class="upcoming-chip" (click)="openEdit(r)">
+              <mat-icon>{{ typeIcon(r.reminderType) }}</mat-icon>
+              {{ r.title }}
+              <span class="upcoming-time">{{ r.remindAt | date:'HH:mm' }}</span>
+            </span>
+          }
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Filter tabs -->
+  <div class="filter-bar">
+    @for (tab of filterTabs; track tab.value) {
+      <button class="filter-tab"
+        [class.active]="selectedFilter === tab.value"
+        (click)="selectedFilter = tab.value">
+        {{ tab.label }}
+        @if (countByFilter(tab.value) > 0) {
+          <span class="tab-count">{{ countByFilter(tab.value) }}</span>
+        }
+      </button>
+    }
+
+    <div class="type-tabs">
+      @for (t of typeTabs; track t.value) {
+        <button class="type-chip"
+          [class.active]="selectedType === t.value"
+          (click)="selectedType = t.value">
+          <mat-icon>{{ t.icon }}</mat-icon>{{ t.label }}
+        </button>
+      }
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-center"><mat-spinner diameter="48" /></div>
+  }
+
+  @if (!loading() && filteredItems().length === 0) {
+    <div class="empty-state">
+      <mat-icon>notifications_off</mat-icon>
+      <h3>Chưa có nhắc nhở nào</h3>
+      <p>Tạo nhắc nhở để không bỏ lỡ lịch uống thuốc, tiêm vaccine hay tái khám</p>
+      <button mat-raised-button color="primary" (click)="openCreate()">
+        <mat-icon>add_alert</mat-icon> Tạo nhắc nhở đầu tiên
+      </button>
+    </div>
+  }
+
+  @if (!loading() && filteredItems().length > 0) {
+    <div class="reminder-list">
+      @for (r of filteredItems(); track r.id) {
+        <div class="reminder-row" [class.disabled]="!r.isEnabled" [class.sent]="r.isSent">
+
+          <!-- Left: type icon -->
+          <div class="type-icon" [ngClass]="r.reminderType.toLowerCase()">
+            <mat-icon>{{ typeIcon(r.reminderType) }}</mat-icon>
+          </div>
+
+          <!-- Center: info -->
+          <div class="reminder-info">
+            <div class="reminder-title-row">
+              <span class="reminder-title">{{ r.title }}</span>
+              @if (r.isSent) {
+                <span class="sent-badge"><mat-icon>check_circle</mat-icon>Đã gửi</span>
+              }
+              @if (!r.isEnabled && !r.isSent) {
+                <span class="disabled-badge">Tắt</span>
+              }
+            </div>
+
+            <div class="reminder-meta">
+              <span class="meta-item">
+                <mat-icon>schedule</mat-icon>
+                {{ r.remindAt | date:'dd/MM/yyyy HH:mm' }}
+                @if (!r.isSent && r.isEnabled) {
+                  <span class="countdown" [class.soon]="isSoon(r.remindAt)" [class.past]="isPast(r.remindAt)">
+                    {{ countdownLabel(r.remindAt) }}
+                  </span>
+                }
+              </span>
+              <span class="meta-item">
+                <mat-icon>{{ channelIcon(r.channel) }}</mat-icon>
+                {{ channelLabel(r.channel) }}
+              </span>
+              @if (r.repeatType && r.repeatType !== 'None') {
+                <span class="meta-item repeat">
+                  <mat-icon>repeat</mat-icon>
+                  {{ repeatLabel(r.repeatType) }}
+                  @if (r.repeatUntil) { · đến {{ r.repeatUntil }} }
+                </span>
+              }
+            </div>
+
+            @if (r.message) {
+              <p class="reminder-message">{{ r.message }}</p>
+            }
+          </div>
+
+          <!-- Right: toggle + actions -->
+          <div class="reminder-actions">
+            <mat-slide-toggle
+              [checked]="r.isEnabled"
+              [disabled]="r.isSent"
+              color="primary"
+              (change)="toggleEnabled(r, $event.checked)"
+              matTooltip="{{ r.isEnabled ? 'Tắt' : 'Bật' }} nhắc nhở" />
+            <button mat-icon-button matTooltip="Chỉnh sửa" (click)="openEdit(r)" [disabled]="r.isSent">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Xoá" class="del-btn" (click)="delete(r)">
+              <mat-icon>delete_outline</mat-icon>
+            </button>
+          </div>
+
+        </div>
+      }
+    </div>
+  }
+
+</div>

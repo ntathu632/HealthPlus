@@ -1,0 +1,41 @@
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h2 class="page-title">Gán bệnh nhân cho bác sĩ</h2>
+      <p class="page-subtitle">Quản lý phân công bác sĩ phụ trách bệnh nhân</p>
+    </div>
+    <button mat-raised-button color="primary" (click)="openAssign()">
+      <mat-icon>add</mat-icon> Gán bệnh nhân mới
+    </button>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-center"><mat-spinner diameter="48" /></div>
+  }
+
+  @if (!loading() && assignments().length === 0) {
+    <div class="empty-state">
+      <mat-icon>assignment_ind</mat-icon>
+      <h3>Chưa có phân công nào</h3>
+      <p>Gán bệnh nhân cho bác sĩ để bắt đầu</p>
+    </div>
+  }
+
+  @if (!loading() && assignments().length > 0) {
+    <div class="list">
+      @for (a of assignments(); track a.id) {
+        <mat-card class="row-card">
+          <div class="pair">
+            <span class="doctor"><mat-icon>medical_services</mat-icon>{{ a.doctorName }}</span>
+            <mat-icon class="arrow">arrow_forward</mat-icon>
+            <span class="patient"><mat-icon>person</mat-icon>{{ a.patientName }}</span>
+          </div>
+          <span class="since">Từ {{ a.createdAt | date:'dd/MM/yyyy' }}</span>
+          <button mat-icon-button matTooltip="Huỷ gán" class="del-btn" (click)="unassign(a)">
+            <mat-icon>link_off</mat-icon>
+          </button>
+        </mat-card>
+      }
+    </div>
+  }
+</div>

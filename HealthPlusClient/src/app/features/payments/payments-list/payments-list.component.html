@@ -1,0 +1,37 @@
+<div class="page">
+  <div class="page-header">
+    <h2 class="page-title">Lịch sử thanh toán</h2>
+    <p class="page-subtitle">Các khoản thanh toán tư vấn bác sĩ (mô phỏng — demo)</p>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-center"><mat-spinner diameter="48" /></div>
+  }
+
+  @if (!loading() && items().length === 0) {
+    <div class="empty-state">
+      <mat-icon>receipt_long</mat-icon>
+      <h3>Chưa có giao dịch nào</h3>
+      <p>Các khoản thanh toán cho lịch hẹn tư vấn trả phí sẽ hiển thị tại đây</p>
+    </div>
+  }
+
+  @if (!loading() && items().length > 0) {
+    <div class="list">
+      @for (p of items(); track p.id) {
+        <mat-card class="row-card">
+          <div class="row-icon"><mat-icon>local_hospital</mat-icon></div>
+          <div class="row-body">
+            <span class="doctor-name">{{ p.doctorName }}</span>
+            <span class="time">Lịch hẹn: {{ p.appointmentTime | date:'HH:mm dd/MM/yyyy' }}</span>
+            <span class="time">Thanh toán: {{ p.paidAt ? (p.paidAt | date:'HH:mm dd/MM/yyyy') : '—' }} · {{ p.method }}</span>
+          </div>
+          <div class="row-end">
+            <span class="amount">{{ p.amount | number }}đ</span>
+            <span class="status-chip" [ngClass]="p.status.toLowerCase()">{{ statusLabel(p.status) }}</span>
+          </div>
+        </mat-card>
+      }
+    </div>
+  }
+</div>

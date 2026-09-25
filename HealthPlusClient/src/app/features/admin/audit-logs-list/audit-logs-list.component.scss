@@ -1,0 +1,32 @@
+.page { max-width: 1200px; margin: 0 auto; }
+.page-header { margin-bottom: 16px; }
+.page-title { font-size: 22px; font-weight: 700; color: var(--hp-text-primary); margin: 0 0 4px; }
+.page-subtitle { color: var(--hp-text-secondary); font-size: 14px; margin: 0; }
+.filters { margin-bottom: 12px; }
+.entity-field { width: 280px; }
+.loading-center { display: flex; justify-content: center; padding: 80px 0; }
+
+.empty-state {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 80px 24px; text-align: center;
+  mat-icon { font-size: 64px; width: 64px; height: 64px; color: var(--hp-border); margin-bottom: 16px; }
+  h3 { font-size: 18px; font-weight: 600; color: var(--hp-text-primary); margin: 0 0 8px; }
+  p { color: var(--hp-text-secondary); margin: 0; font-size: 14px; }
+}
+
+.table-wrap {
+  overflow-x: auto; background: white; border-radius: var(--hp-radius, 12px);
+  box-shadow: var(--hp-shadow); margin-bottom: 16px;
+}
+.logs-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.logs-table th {
+  text-align: left; padding: 12px 14px; color: var(--hp-text-secondary);
+  font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.4px;
+  border-bottom: 1px solid var(--hp-border); white-space: nowrap;
+}
+.logs-table td { padding: 10px 14px; border-bottom: 1px solid var(--hp-border); white-space: nowrap; }
+
+.pagination {
+  display: flex; align-items: center; justify-content: center; gap: 16px;
+  font-size: 13px; color: var(--hp-text-secondary);
+}

@@ -1,0 +1,61 @@
+<app-info-page-layout
+  title="Liên hệ"
+  subtitle="Có câu hỏi hoặc góp ý về Health+? Để lại lời nhắn, đội ngũ sẽ phản hồi sớm nhất"
+  icon="mail">
+
+  <div class="contact-layout">
+    <div class="contact-main">
+      @if (sent()) {
+        <div class="sent-confirm">
+          <mat-icon>check_circle</mat-icon>
+          <p>Cảm ơn bạn đã liên hệ! Tin nhắn của bạn đã được gửi tới đội ngũ hỗ trợ.</p>
+        </div>
+      } @else {
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="contact-form">
+          <mat-form-field appearance="outline">
+            <mat-label>Họ tên</mat-label>
+            <input matInput formControlName="name" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" formControlName="email" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Nội dung</mat-label>
+            <textarea matInput rows="5" formControlName="message"></textarea>
+          </mat-form-field>
+
+          <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || sending()" class="submit-btn">
+            {{ sending() ? 'Đang gửi...' : 'Gửi liên hệ' }}
+          </button>
+        </form>
+      }
+    </div>
+
+    <aside class="contact-side">
+      <div class="side-card">
+        <mat-icon>schedule</mat-icon>
+        <div>
+          <h3>Thời gian phản hồi</h3>
+          <p>Thường trong vòng 24 giờ làm việc</p>
+        </div>
+      </div>
+      <div class="side-card">
+        <mat-icon>help_center</mat-icon>
+        <div>
+          <h3>Câu hỏi thường gặp</h3>
+          <p>Xem <a routerLink="/cau-hoi-thuong-gap">FAQ</a> trước khi gửi liên hệ</p>
+        </div>
+      </div>
+      <div class="side-card">
+        <mat-icon>lock</mat-icon>
+        <div>
+          <h3>Bảo mật</h3>
+          <p>Thông tin bạn gửi chỉ dùng để phản hồi yêu cầu</p>
+        </div>
+      </div>
+    </aside>
+  </div>
+</app-info-page-layout>

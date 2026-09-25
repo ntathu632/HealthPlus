@@ -1,0 +1,9 @@
+**/bin/
+**/obj/
+**/.vs/
+**/logs/
+**/uploads/
+**/*.user
+**/test-*.png
+HealthPlus.Tests/
+*.md

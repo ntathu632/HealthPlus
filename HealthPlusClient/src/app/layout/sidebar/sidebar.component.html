@@ -1,0 +1,50 @@
+<aside class="sidebar">
+
+  <!-- Logo -->
+  <div class="logo-area">
+    <div class="logo-mark">
+      <span class="cross-h"></span>
+      <span class="cross-v"></span>
+      <mat-icon class="heart">favorite</mat-icon>
+    </div>
+    <div>
+      <p class="logo-name">Health<span class="plus">+</span></p>
+      <p class="logo-sub">Sức khỏe cá nhân</p>
+    </div>
+  </div>
+
+  <!-- Nav -->
+  <nav class="nav">
+    <p class="nav-label">CHỨC NĂNG</p>
+    @for (item of navItems(); track item.route) {
+      <a class="nav-item"
+         [routerLink]="item.route"
+         routerLinkActive="active"
+         (click)="closeSidenav.emit()">
+        <span class="ni-icon"><mat-icon>{{ item.icon }}</mat-icon></span>
+        <span class="ni-text">{{ item.label }}</span>
+      </a>
+    }
+  </nav>
+
+  <div class="flex-1"></div>
+
+  <!-- User -->
+  <div class="user-section">
+    <div class="user-av">
+      @if (auth.user()?.avatarUrl) {
+        <img [src]="auth.user()!.avatarUrl" alt="Avatar" class="avatar-img" />
+      } @else {
+        {{ initials() }}
+      }
+    </div>
+    <div class="user-info">
+      <p class="user-name">{{ auth.currentUserName() }}</p>
+      <p class="user-role">{{ roleLabel() }}</p>
+    </div>
+    <button class="logout-btn" (click)="auth.logout()" title="Đăng xuất">
+      <mat-icon>logout</mat-icon>
+    </button>
+  </div>
+
+</aside>

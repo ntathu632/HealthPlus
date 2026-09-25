@@ -1,0 +1,96 @@
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h2 class="page-title">Khám bệnh trực tuyến</h2>
+      <p class="page-subtitle">Đặt lịch và theo dõi các lịch hẹn khám của bạn</p>
+    </div>
+    <div class="header-actions">
+      <a mat-stroked-button routerLink="/payments">
+        <mat-icon>receipt_long</mat-icon> Lịch sử thanh toán
+      </a>
+      <button mat-raised-button color="primary" (click)="openBook()">
+        <mat-icon>add</mat-icon> Đặt lịch hẹn
+      </button>
+    </div>
+  </div>
+
+  <div class="filter-row">
+    <mat-chip-listbox class="status-tabs" [value]="selectedStatus()" (change)="onStatusFilterChange($event)" aria-label="Lọc theo trạng thái">
+      @for (tab of statusTabs; track tab.value) {
+        <mat-chip-option [value]="tab.value">
+          {{ tab.label }}
+          @if (countByStatus(tab.value) > 0) {
+            <span class="tab-count" [ngClass]="tab.value.toLowerCase()">{{ countByStatus(tab.value) }}</span>
+          }
+        </mat-chip-option>
+      }
+    </mat-chip-listbox>
+
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-icon matPrefix>search</mat-icon>
+      <input matInput placeholder="Tìm theo tên bác sĩ..." [ngModel]="searchTerm()" (ngModelChange)="searchTerm.set($event)" />
+      @if (searchTerm()) {
+        <button matSuffix mat-icon-button (click)="searchTerm.set('')" aria-label="Xoá tìm kiếm">
+          <mat-icon>close</mat-icon>
+        </button>
+      }
+    </mat-form-field>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-center"><mat-spinner diameter="48" /></div>
+  }
+
+  @if (!loading() && filteredItems().length === 0) {
+    <div class="empty-state">
+      <mat-icon>event</mat-icon>
+      <h3>Chưa có lịch hẹn nào</h3>
+      <p>Đặt lịch hẹn để được bác sĩ tư vấn và khám bệnh</p>
+      <button mat-raised-button color="primary" (click)="openBook()">
+        <mat-icon>add</mat-icon> Đặt lịch hẹn đầu tiên
+      </button>
+    </div>
+  }
+
+  @if (!loading() && filteredItems().length > 0) {
+    <div class="list">
+      @for (a of filteredItems(); track a.id) {
+        <mat-card class="row-card">
+          <div class="status-bar" [ngClass]="a.status.toLowerCase()"></div>
+          <div class="row-body">
+            <span class="doctor-name"><mat-icon>medical_services</mat-icon>{{ a.doctorName }}</span>
+            <span class="time">{{ a.appointmentTime | date:'HH:mm dd/MM/yyyy' }}</span>
+            @if (a.reason) { <p class="reason">{{ a.reason }}</p> }
+            @if (a.notes) { <p class="notes"><b>Ghi chú bác sĩ:</b> {{ a.notes }}</p> }
+            @if (a.fee > 0) {
+              @if (a.isPaid) {
+                <span class="pay-chip paid"><mat-icon>check_circle</mat-icon> Đã thanh toán {{ a.fee | number }}đ</span>
+              } @else {
+                <div class="pay-row">
+                  <span class="pay-chip unpaid"><mat-icon>error_outline</mat-icon> Chưa thanh toán {{ a.fee | number }}đ</span>
+                  <button mat-stroked-button color="primary" [disabled]="payingId() === a.id" (click)="pay(a)">
+                    @if (payingId() === a.id) { <mat-spinner diameter="16" /> }
+                    @else { Thanh toán ngay }
+                  </button>
+                </div>
+              }
+            }
+            @if (a.status === 'Confirmed' && a.isPaid) {
+              <a mat-raised-button color="primary" class="video-btn" [href]="a.videoRoomUrl" target="_blank" rel="noopener">
+                <mat-icon>videocam</mat-icon> Vào phòng tư vấn
+              </a>
+            }
+          </div>
+          <div class="actions-slot">
+            <span class="status-chip" [ngClass]="a.status.toLowerCase()">{{ statusLabel(a.status) }}</span>
+            @if (a.status === 'Pending' || a.status === 'Confirmed') {
+              <button mat-icon-button matTooltip="Huỷ lịch hẹn" class="del-btn" (click)="cancel(a)">
+                <mat-icon>event_busy</mat-icon>
+              </button>
+            }
+          </div>
+        </mat-card>
+      }
+    </div>
+  }
+</div>

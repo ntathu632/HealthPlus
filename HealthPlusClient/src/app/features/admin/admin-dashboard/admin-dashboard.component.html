@@ -1,0 +1,56 @@
+<div class="page">
+  <div class="page-header">
+    <h2 class="page-title">Tổng quan hệ thống</h2>
+    <p class="page-subtitle">Số liệu tổng hợp toàn hệ thống HealthPlus</p>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-center"><mat-spinner diameter="48" /></div>
+  }
+
+  @if (!loading()) {
+    <div class="stats-grid">
+      @for (c of cards(); track c.label) {
+        <mat-card class="stat-card">
+          <div class="stat-icon" [style.background]="c.color + '1A'" [style.color]="c.color">
+            <mat-icon>{{ c.icon }}</mat-icon>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">{{ c.value }}</span>
+            <span class="stat-label">{{ c.label }}</span>
+          </div>
+        </mat-card>
+      }
+    </div>
+
+    <div class="charts-row">
+      <mat-card class="chart-card">
+        <h3 class="chart-title">Phân bổ người dùng theo vai trò</h3>
+        <div class="chart-wrap">
+          <canvas baseChart
+            [data]="chartData"
+            [options]="chartOptions"
+            type="doughnut">
+          </canvas>
+        </div>
+      </mat-card>
+
+      <mat-card class="chart-card">
+        <h3 class="chart-title">Số bệnh nhân theo từng bác sĩ</h3>
+        @if (loadingPatientsByDoctor()) {
+          <div class="chart-loading"><mat-spinner diameter="32" /></div>
+        } @else if (patientsByDoctorData.labels?.length === 0) {
+          <div class="chart-empty">Chưa có bệnh nhân nào được gán cho bác sĩ</div>
+        } @else {
+          <div class="chart-wrap">
+            <canvas baseChart
+              [data]="patientsByDoctorData"
+              [options]="patientsByDoctorOptions"
+              type="bar">
+            </canvas>
+          </div>
+        }
+      </mat-card>
+    </div>
+  }
+</div>
