@@ -95,6 +95,10 @@ builder.Services.AddSwaggerGen(c =>
 // ─── Pipeline ─────────────────────────────────────────────────────────────────
 var app = builder.Build();
 
+// TẠM THỜI: bắt lỗi migrate/seed để hiện ra khi host không ghi được log — gỡ sau khi deploy ổn
+Exception? startupError = null;
+try
+{
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -384,6 +388,24 @@ using (var scope = app.Services.CreateScope())
         await uow.SaveChangesAsync();
         Log.Information("Đã seed 4 bệnh viện (tên hư cấu) và gán chuyên khoa/phí tư vấn cho bác sĩ demo");
     }
+}
+}
+catch (Exception ex)
+{
+    startupError = ex;
+    Log.Fatal(ex, "Lỗi khi migrate/seed database lúc khởi động");
+}
+
+if (startupError != null)
+{
+    app.Run(async ctx =>
+    {
+        ctx.Response.StatusCode = 500;
+        ctx.Response.ContentType = "text/plain; charset=utf-8";
+        await ctx.Response.WriteAsync("STARTUP ERROR\n" + startupError);
+    });
+    app.Run();
+    return;
 }
 
 if (app.Environment.IsDevelopment())
