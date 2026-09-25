@@ -1,5 +1,6 @@
 using HealthPlus.Application.Interfaces;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace HealthPlus.Infrastructure.Services;
@@ -10,10 +11,12 @@ public class LocalFileStorageService : IFileStorageService
     private readonly string _baseUrl;
     private readonly ILogger<LocalFileStorageService> _logger;
 
-    public LocalFileStorageService(IWebHostEnvironment env, ILogger<LocalFileStorageService> logger)
+    public LocalFileStorageService(IWebHostEnvironment env, IConfiguration config, ILogger<LocalFileStorageService> logger)
     {
         _uploadRoot = Path.Combine(env.WebRootPath ?? env.ContentRootPath, "uploads");
-        _baseUrl = "/uploads";
+        // Web và API chạy ở 2 site khác nhau → link file phải là địa chỉ đầy đủ của API.
+        // Để trống Storage:PublicBaseUrl (dev) thì giữ link tương đối như cũ.
+        _baseUrl = $"{config["Storage:PublicBaseUrl"]?.TrimEnd('/')}/uploads";
         _logger = logger;
         Directory.CreateDirectory(_uploadRoot);
     }

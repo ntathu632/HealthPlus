@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  apiUrl: '/api',
+  apiUrl: 'https://healthplusapi.runasp.net/api',
   firebaseConfig: {
     apiKey: 'AIzaSyDFjdvUdaUDBjPqFpMLRddAbRoer8RIWOs',
     authDomain: 'healthplus-6a73f.firebaseapp.com',

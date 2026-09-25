@@ -35,3 +35,7 @@ HealthPlus/HealthPlus/uploads/
 *.docx
 *.xlsx
 HealthPlus/HealthPlusDB.sql
+
+# Tài liệu nội bộ, không commit
+HOSTING_MONSTERASP.md
+QUY_TAC_COMMIT.md
