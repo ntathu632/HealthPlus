@@ -14,6 +14,9 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 
+// TẠM THỜI: host không ghi được log nên bọc toàn bộ khởi động để hiện lỗi ra response — gỡ sau khi deploy ổn
+try
+{
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseSerilog((ctx, lc) => lc.ReadFrom.Configuration(ctx.Configuration));
@@ -95,10 +98,6 @@ builder.Services.AddSwaggerGen(c =>
 // ─── Pipeline ─────────────────────────────────────────────────────────────────
 var app = builder.Build();
 
-// TẠM THỜI: bắt lỗi migrate/seed để hiện ra khi host không ghi được log — gỡ sau khi deploy ổn
-Exception? startupError = null;
-try
-{
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -389,24 +388,6 @@ using (var scope = app.Services.CreateScope())
         Log.Information("Đã seed 4 bệnh viện (tên hư cấu) và gán chuyên khoa/phí tư vấn cho bác sĩ demo");
     }
 }
-}
-catch (Exception ex)
-{
-    startupError = ex;
-    Log.Fatal(ex, "Lỗi khi migrate/seed database lúc khởi động");
-}
-
-if (startupError != null)
-{
-    app.Run(async ctx =>
-    {
-        ctx.Response.StatusCode = 500;
-        ctx.Response.ContentType = "text/plain; charset=utf-8";
-        await ctx.Response.WriteAsync("STARTUP ERROR\n" + startupError);
-    });
-    app.Run();
-    return;
-}
 
 if (app.Environment.IsDevelopment())
 {
@@ -425,3 +406,17 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+}
+catch (Exception ex) when (ex is not HostAbortedException)
+{
+    // Không đọc appsettings.Production.json, phòng khi chính file đó gây lỗi
+    var diag = WebApplication.CreateBuilder(new WebApplicationOptions { Args = args, EnvironmentName = "StartupDiagnostics" });
+    var diagApp = diag.Build();
+    diagApp.Run(async ctx =>
+    {
+        ctx.Response.StatusCode = 500;
+        ctx.Response.ContentType = "text/plain; charset=utf-8";
+        await ctx.Response.WriteAsync("STARTUP ERROR\n" + ex);
+    });
+    diagApp.Run();
+}
