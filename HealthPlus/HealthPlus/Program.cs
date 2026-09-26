@@ -390,10 +390,12 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-if (app.Environment.IsDevelopment())
+// Production bật/tắt Swagger bằng cấu hình Swagger:Enabled (trong appsettings.Production.json trên host)
+if (app.Environment.IsDevelopment() || app.Configuration.GetValue<bool>("Swagger:Enabled"))
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.MapGet("/", () => Results.Redirect("/swagger")).ExcludeFromDescription();
 }
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
