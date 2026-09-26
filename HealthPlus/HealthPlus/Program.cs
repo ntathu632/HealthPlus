@@ -401,6 +401,15 @@ app.UseSerilogRequestLogging();
 if (!app.Environment.IsDevelopment())
     app.UseHttpsRedirection();
 app.UseStaticFiles();
+// File upload được LocalFileStorageService lưu ở <WebRoot hoặc ContentRoot>/uploads — dự án không có
+// wwwroot nên UseStaticFiles() ở trên không phục vụ tới, phải khai báo riêng đúng thư mục đó
+var uploadsPath = Path.Combine(app.Environment.WebRootPath ?? app.Environment.ContentRootPath, "uploads");
+Directory.CreateDirectory(uploadsPath);
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(uploadsPath),
+    RequestPath = "/uploads"
+});
 app.UseCors("Angular");
 app.UseAuthentication();
 app.UseAuthorization();
